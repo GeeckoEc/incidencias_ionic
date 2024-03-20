@@ -1,0 +1,36 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>{{titulo}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">{{titulo}}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <div class="container">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Awesome Title</ion-card-title>
+        <ion-card-subtitle>Iniciar sesión</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item class="ion-margin-vertical">
+          <ion-input type="text" labelPlacement="floating" [(ngModel)]="correo">
+            <div slot="label">Correo electrónico</div>
+          </ion-input>
+        </ion-item>
+        <ion-item class="ion-margin-vertical">
+          <ion-input type="password" labelPlacement="floating" [(ngModel)]="contrasena">
+            <div slot="label">Contrasena</div>
+          </ion-input>
+        </ion-item>
+        <ion-button (click)="iniciarSesion()" expand="block" >
+          Iniciar sesión
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
