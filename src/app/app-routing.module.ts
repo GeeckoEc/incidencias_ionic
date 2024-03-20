@@ -15,6 +15,10 @@ const routes: Routes = [
     path: 'sign-in',
     loadChildren: () => import('./pages/auth/sign-in/sign-in.module').then( m => m.SignInPageModule)
   },
+  {
+    path: 'main-start',
+    loadChildren: () => import('./pages/start/main-start/main-start.module').then( m => m.MainStartPageModule)
+  },
 ];
 
 @NgModule({
