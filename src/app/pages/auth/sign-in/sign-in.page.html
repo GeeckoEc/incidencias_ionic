@@ -9,15 +9,21 @@
         <form [formGroup]="sesionForm" novalidate>
           <ion-item class="ion-margin-vertical">
             <ion-input type="text" labelPlacement="floating" formControlName="correo" required>
-              <div slot="label">Correo electrónico</div>
+              <div slot="label">
+                <ion-icon name="mail-outline"></ion-icon>
+                Correo electrónico
+              </div>
             </ion-input>
           </ion-item>
           <ion-item class="ion-margin-vertical">
             <ion-input type="password" labelPlacement="floating" formControlName="contrasena" required>
-              <div slot="label">Contrasena</div>
+              <div slot="label">
+                <ion-icon name="lock-closed-outline"></ion-icon>
+                Contrasena
+              </div>
             </ion-input>
           </ion-item>
-          <ion-button (click)="iniciarSesion()" expand="block" class="ion-margin-vertical" [disable]="deshabilitarBoton">
+          <ion-button (click)="iniciarSesion()" expand="block" class="ion-margin-vertical" [disabled]="!sesionForm.valid">
             Iniciar sesión
           </ion-button>
           <ion-note>Olvidé mi <a (click)="recuperarContrasena()"><strong>contraseña</strong></a>.</ion-note>

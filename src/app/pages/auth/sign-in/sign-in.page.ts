@@ -12,8 +12,6 @@ import { ServerService } from 'src/app/services/server.service';
 export class SignInPage implements OnInit {
 
   public titulo:      string = 'Iniciar Sesión'
-  public correo:      string = ''
-  public contrasena:  string = ''
   public sesionForm:  FormGroup
   public deshabilitarBoton: boolean = true
 
@@ -29,16 +27,16 @@ export class SignInPage implements OnInit {
 
   crearFormulario () {
     this.sesionForm = this.formulario.group({
-      correo: ['', Validators.required, Validators.email],
-      contrasena: ['', Validators.min(8), Validators.max(32)]
+      correo: ['', [Validators.required, Validators.email]],
+      contrasena: ['', [Validators.minLength(8), Validators.maxLength(32)]]
     })
   }
 
   async iniciarSesion (){
     let datos = {
       accion: 'prueba',
-      correo: this.correo, 
-      contrasena: this.contrasena
+      /* correo: this.correo, 
+      contrasena: this.contrasena */
     }
     await this.servidor.enviar(datos, 'autenticar').subscribe(
       (datos: any) => {
