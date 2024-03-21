@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { NavigationService } from 'src/app/services/navigation.service';
 import { NotifyService } from 'src/app/services/notify.service';
 import { ServerService } from 'src/app/services/server.service';
-
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -19,6 +20,8 @@ export class SignInPage implements OnInit {
     private servidor: ServerService,
     private notificar: NotifyService,
     private formulario: FormBuilder,
+    private almacenar: StorageService,
+    private irA: NavigationService
   ) { }
 
   ngOnInit() {
@@ -34,17 +37,27 @@ export class SignInPage implements OnInit {
 
   async iniciarSesion (){
     let datos = {
-      accion: 'prueba',
-      /* correo: this.correo, 
-      contrasena: this.contrasena */
+      accion: 'iniciarSesion',
+      correo: this.sesionForm.value.correo, 
+      contrasena: this.sesionForm.value.contrasena
     }
     await this.servidor.enviar(datos, 'autenticar').subscribe(
       (datos: any) => {
         if (datos.estado == true) {
-          this.notificar.notificarSimple(datos.mensaje)
+          this.notificar.notificarComplejo('Inicio de sesión: ',datos.mensaje, 'checkmark-circle-outline', 'success')
+          this.almacenarSesion(datos) 
+          this.irA.pagina('main-start')
+        } else {
+          this.notificar.notificarComplejo('Inicio de sesión: ',datos.mensaje, 'close-circle-outline', 'danger')
         }
       }
     )
+  }
+
+  async almacenarSesion (datos: any) {
+    await this.almacenar.guardar('token', datos.token)
+    await this.almacenar.guardar('nombres', datos.nombres)
+    await this.almacenar.guardar('apellidos', datos.apellidos)
   }
 
   recuperarContrasena () {

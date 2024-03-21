@@ -20,7 +20,7 @@
               <div slot="label">
                 <ion-icon name="lock-closed-outline"></ion-icon>
                 Contraseña
-                <ion-icon name="lock-closed-outline" *ngIf="sesionForm.get('contrasena')?.hasError('required')"></ion-icon>
+                <span *ngIf="sesionForm.get('contrasena')?.hasError('required')"></span>
               </div>
             </ion-input>
           </ion-item>
@@ -29,7 +29,6 @@
           </ion-button>
           <ion-note>Olvidé mi <a (click)="recuperarContrasena()"><strong>contraseña</strong></a>.</ion-note>
         </form>
-        <!--  -->
       </ion-card-content>
     </ion-card>
   </div>
