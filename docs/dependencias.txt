@@ -1,3 +1,6 @@
+Agregar 
+    "strictPropertyInitialization": false,
+Luego se Strict en tsconfig.json.
 Dentro de la carpeta src/app/ existe un archivo llamado app.module.ts, importar HttpClienteModule y agregarlo en el inports[].
 Crea una  carpeta www en la raiz del proyecto y pon un index.html dentro.
 npm i @capacitor/preferences

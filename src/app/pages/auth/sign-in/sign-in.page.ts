@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NotifyService } from 'src/app/services/notify.service';
 import { ServerService } from 'src/app/services/server.service';
+
 
 @Component({
   selector: 'app-sign-in',
@@ -12,12 +14,24 @@ export class SignInPage implements OnInit {
   public titulo:      string = 'Iniciar Sesión'
   public correo:      string = ''
   public contrasena:  string = ''
+  public sesionForm:  FormGroup
+  public deshabilitarBoton: boolean = true
+
   constructor(
     private servidor: ServerService,
-    private notificar: NotifyService
+    private notificar: NotifyService,
+    private formulario: FormBuilder,
   ) { }
 
   ngOnInit() {
+    this.crearFormulario()
+  }
+
+  crearFormulario () {
+    this.sesionForm = this.formulario.group({
+      correo: ['', Validators.required, Validators.email],
+      contrasena: ['', Validators.min(8), Validators.max(32)]
+    })
   }
 
   async iniciarSesion (){
@@ -33,5 +47,9 @@ export class SignInPage implements OnInit {
         }
       }
     )
+  }
+
+  recuperarContrasena () {
+
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { Preferences, PreferencesPlugin } from '@capacitor/preferences';
+//import { Preferences, PreferencesPlugin } from '@capacitor/preferences';
 import { Storage } from '@ionic/storage-angular';
 
 @Injectable({
@@ -8,9 +8,11 @@ import { Storage } from '@ionic/storage-angular';
 export class StorageService {
 
   constructor(
-    @Inject(Preferences) private preferencias: PreferencesPlugin,
+    //@Inject(Preferences) private preferencias: PreferencesPlugin,
     private almacenar: Storage
-  ) { }
+  ) {
+    this.almacenar.create()
+  }
 
   async guardar (indice: string, datos: any) {
     /*await this.preferencias.set({
@@ -25,7 +27,7 @@ export class StorageService {
       key: indice
     }) */
     let datos = await this.almacenar.get(indice)
-    return datos.value
+    return datos
   }
 
   async eliminar (indice: string) {

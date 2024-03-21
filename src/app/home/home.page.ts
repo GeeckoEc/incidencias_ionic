@@ -23,7 +23,11 @@ export class HomePage {
   async token () {
     await this.almacenar.obtener('token').then(
       (datos: any) => {
-        this.verificarSesion(datos)
+        setTimeout(
+          () => {
+            this.verificarSesion(datos)
+          }, 1500
+        )
       }
     )
   }
