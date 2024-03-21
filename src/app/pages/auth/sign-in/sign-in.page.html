@@ -19,7 +19,8 @@
             <ion-input type="password" labelPlacement="floating" formControlName="contrasena" required>
               <div slot="label">
                 <ion-icon name="lock-closed-outline"></ion-icon>
-                Contrasena
+                Contraseña
+                <ion-icon name="lock-closed-outline" *ngIf="sesionForm.get('contrasena')?.hasError('required')"></ion-icon>
               </div>
             </ion-input>
           </ion-item>
