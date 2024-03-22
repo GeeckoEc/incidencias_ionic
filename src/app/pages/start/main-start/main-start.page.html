@@ -1,13 +1,57 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>main-start</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
+<ion-menu side="end" contentId="main-content">
+  <ion-header>
     <ion-toolbar>
-      <ion-title size="large">main-start</ion-title>
+      <ion-title>Menu</ion-title>
     </ion-toolbar>
   </ion-header>
-</ion-content>
+  <ion-content class="ion-padding" >
+    
+      <ion-item [lines]="false">
+        <ion-button expand="block" fill="clear" shape="round">
+          <ion-icon name="warning-outline"></ion-icon>
+          Incidencias
+        </ion-button>
+      </ion-item>
+      <ion-item [lines]="false">
+        <ion-button  expand="block" fill="clear" shape="round">
+          <ion-icon name="pie-chart-outline"></ion-icon>
+          Reportes
+        </ion-button>
+      </ion-item>
+      
+      <div style="position: absolute; bottom: 10px;">
+      <ion-item [lines]="false">
+        <ion-button class="ion-align-items-end" expand="block" fill="clear" shape="round">
+          <ion-icon name="people-outline"></ion-icon>
+          Usuarios
+        </ion-button>
+      </ion-item>
+      <ion-item [lines]="false">
+        <ion-button class="ion-align-items-end" expand="full" fill="clear" shape="round">
+          <ion-icon name="settings-outline"></ion-icon>
+          Configuración
+        </ion-button>
+      </ion-item>
+      <ion-item [lines]="false">
+        <ion-button class="ion-align-items-end" expand="block" fill="clear" shape="round">
+          <ion-icon name="power-outline"></ion-icon>
+          Cerrar sesión
+        </ion-button>
+      </ion-item></div>
+      
+  </ion-content>
+</ion-menu>
+<div class="ion-page" id="main-content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title class="ion-align-items-center">
+        <!-- <img height="24px" style="margin-top: 10px;" src="../../../../assets/images/logo.png" alt="Logo"> -->
+        <!-- <ion-icon style="padding-top: 5px;" color="warning" name="warning-outline"></ion-icon> -->
+        <span>¡Hola {{nombre}}!</span></ion-title>
+      <ion-buttons slot="end">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="ion-padding"> Tap the button in the toolbar to open the menu. </ion-content>
+</div>
