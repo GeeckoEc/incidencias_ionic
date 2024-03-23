@@ -19,6 +19,18 @@ const routes: Routes = [
     path: 'main-start',
     loadChildren: () => import('./pages/start/main-start/main-start.module').then( m => m.MainStartPageModule)
   },
+  {
+    path: 'incidents-list',
+    loadChildren: () => import('./pages/incidences/incidents-list/incidents-list.module').then( m => m.IncidentsListPageModule)
+  },
+  {
+    path: 'incidents-form',
+    loadChildren: () => import('./pages/incidences/incidents-form/incidents-form.module').then( m => m.IncidentsFormPageModule)
+  },
+  {
+    path: 'reset-password',
+    loadChildren: () => import('./pages/auth/reset-password/reset-password.module').then( m => m.ResetPasswordPageModule)
+  },
 ];
 
 @NgModule({

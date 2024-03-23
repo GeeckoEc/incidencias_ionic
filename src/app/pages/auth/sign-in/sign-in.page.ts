@@ -30,15 +30,15 @@ export class SignInPage implements OnInit {
 
   crearFormulario () {
     this.sesionForm = this.formulario.group({
-      correo: ['', [Validators.required, Validators.email]],
+      correo:     ['', [Validators.required, Validators.email]],
       contrasena: ['', [Validators.minLength(8), Validators.maxLength(32)]]
     })
   }
 
   async iniciarSesion (){
     let datos = {
-      accion: 'iniciarSesion',
-      correo: this.sesionForm.value.correo, 
+      accion:     'iniciarSesion',
+      correo:     this.sesionForm.value.correo, 
       contrasena: this.sesionForm.value.contrasena
     }
     await this.servidor.enviar(datos, 'autenticar').subscribe(
