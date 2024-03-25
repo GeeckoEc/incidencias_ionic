@@ -5,8 +5,8 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class ServerService {
-  //private ipServer: string = '192.16.0.10'
-  private ipServer: string = '192.168.18.26'
+  private ipServer: string = '192.168.0.10'
+  //private ipServer: string = '192.168.18.26'
 
   constructor(
     private http: HttpClient
