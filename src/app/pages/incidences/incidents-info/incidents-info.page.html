@@ -1,0 +1,59 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>{{titulo}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button (click)="salir()">
+          <ion-icon slot="start" name="chevron-back-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <ion-title size="large">{{titulo}}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <div id="container">
+    <ion-item class="ion-margin" lines="none" class="ion-text-center">
+      <h3>{{informacion.asunto}}</h3>
+    </ion-item>
+    <ion-list class="ion-margin">
+      <ion-note>Descripcion</ion-note>
+      <ion-text>
+        <p>{{informacion.descripcion}}</p>
+      </ion-text>
+      <ion-note>Impacto</ion-note>
+      <ion-text>
+        <p>{{informacion.impacto}}</p>
+      </ion-text>
+      <ion-note>Riesgos</ion-note>
+      <ion-text>
+        <p>{{informacion.riesgos}}</p>
+      </ion-text>
+    </ion-list>
+    <ion-list class="ion-margin">
+      <ion-note>Estado de la Incidencia</ion-note>
+      <ion-text>
+        <p>{{estadoIncidencia}}</p>
+      </ion-text>
+      <ion-note>Fecha de la Incidencia</ion-note>
+      <ion-text>
+        <p>{{fechaIncidencia}}</p>
+      </ion-text>
+      <ion-note>Registrado por</ion-note>
+      <ion-text>
+        <p>{{informacion.usuario}}</p>
+      </ion-text>
+      <ion-note>Rol del Usuario</ion-note>
+      <ion-text>
+        <p>{{informacion.rol}}</p>
+      </ion-text>
+      <ion-note>Correo Electrónico</ion-note>
+      <ion-text>
+        <p>{{informacion.correo}}</p>
+      </ion-text>
+    </ion-list>
+  </div>
+</ion-content>

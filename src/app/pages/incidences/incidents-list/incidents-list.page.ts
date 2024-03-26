@@ -109,7 +109,7 @@ export class IncidentsListPage implements OnInit {
   async verIncidencia (id: number) {
     await this.almacenar.guardar('idRegistro', id).then(
       () => {
-        this.irA.pagina('incidents-view')
+        this.irA.pagina('incidents-info')
       }
     )
   }

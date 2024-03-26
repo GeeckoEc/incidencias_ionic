@@ -4,17 +4,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { IncidentsViewPageRoutingModule } from './incidents-view-routing.module';
+import { IncidentsInfoPageRoutingModule } from './incidents-info-routing.module';
 
-import { IncidentsViewPage } from './incidents-view.page';
+import { IncidentsInfoPage } from './incidents-info.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    IncidentsViewPageRoutingModule
+    IncidentsInfoPageRoutingModule
   ],
-  declarations: [IncidentsViewPage]
+  declarations: [IncidentsInfoPage]
 })
-export class IncidentsViewPageModule {}
+export class IncidentsInfoPageModule {}
