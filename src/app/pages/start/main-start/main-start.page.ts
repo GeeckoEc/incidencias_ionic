@@ -57,6 +57,6 @@ export class MainStartPage implements OnInit {
         role: 'cancel',
       }
     ]
-    await this.accion.presentActionSheet('Cerrar sesión', '¿Desea cerrar la sesión?', botones)
+    await this.accion.mensajeAccion('Cerrar sesión', '¿Desea cerrar la sesión?', botones)
   }
 }

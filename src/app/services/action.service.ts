@@ -10,7 +10,7 @@ export class ActionService {
     private actionSheetController: ActionSheetController,
   ) { }
 
-  async presentActionSheet(titulo: string, subTitulo: string, botones: any[]) {
+  async mensajeAccion(titulo: string, subTitulo: string, botones: any[]) {
     const actionSheet = await this.actionSheetController.create({
       header: titulo,
       subHeader: subTitulo,

@@ -1,0 +1,82 @@
+<!-- <ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Información del Incidente</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <div>
+    <ion-text class="ion-text-center">
+      <h3>{{informacion.asunto}}</h3>
+    </ion-text>
+  </div>
+</ion-content> -->
+
+<ion-content [fullscreen]="true">
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button color="primary" (click)="regresar()">
+          <ion-icon name="chevron-back-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <ion-title class="ion-no-padding">Información de Incidencia</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <div>
+    <ion-text class="ion-text-center">
+      <h3>{{informacion.asunto}}</h3>
+    </ion-text>
+    <ion-list class="ion-margin ion-padding">
+      <ion-note>Descripción</ion-note>
+      <ion-text>
+        <p>{{informacion.descripcion}}</p>
+      </ion-text>
+      <ion-note>Impacto</ion-note>
+      <ion-text>
+        <p>{{informacion.impacto}}</p>
+      </ion-text>
+      <ion-note>Riesgos</ion-note>
+      <ion-text>
+        <p>{{informacion.riesgos}}</p>
+      </ion-text>
+    </ion-list>
+    <ion-list class="ion-margin ion-padding">
+      <ion-note>Fecha</ion-note>
+      <ion-text>
+        <p>{{fecha}}</p>
+      </ion-text>
+      <ion-note>Prioridad</ion-note>
+      <ion-text>
+        <p>{{informacion.prioridad}}</p>
+      </ion-text>
+      <ion-note>Usuario</ion-note>
+      <ion-text>
+        <p>{{informacion.usuario}}</p>
+      </ion-text>
+      <ion-note>Rol</ion-note>
+      <ion-text>
+        <p>{{informacion.rol}}</p>
+      </ion-text>
+      <ion-note>Correo electrónico</ion-note>
+      <ion-text>
+        <p>{{informacion.correo}}</p>
+      </ion-text>
+    </ion-list>
+    <ion-list class="ion-margin ion-padding">
+      <ion-list-header>
+        <ion-label>Usuarios asignados</ion-label>
+      </ion-list-header>
+      <ion-item lines="none" *ngFor="let asignados of listaAsignados">
+        <ion-label>{{asignados.usuario}}</ion-label>
+      </ion-item>
+    </ion-list>
+    <ion-list class="ion-margin ion-padding">
+      <ion-list-header>
+        <ion-label>Actividades realizadas</ion-label>
+      </ion-list-header>
+      <ion-item lines="none" *ngFor="let actividades of listaActividades">
+        <ion-label>{{actividades.actividad}}</ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>

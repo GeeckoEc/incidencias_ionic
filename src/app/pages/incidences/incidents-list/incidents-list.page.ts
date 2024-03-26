@@ -13,8 +13,13 @@ import { StorageService } from 'src/app/services/storage.service';
 })
 export class IncidentsListPage implements OnInit {
 
-  listaIncidencias: any
-  listaEstados:    any    = [
+  ocultarHabilitar:     boolean     = true
+  ocultarDeshabilitar:  boolean  = false
+  ocultarEditar:        boolean        = false
+  listaIncidencias:     any
+  deshabilitarSliding:  boolean  =  false
+  estado:               string  = '1'
+  listaEstados:         any    = [
     {
       id:  0,
       nombre: 'Deshabilitadas'
@@ -28,8 +33,6 @@ export class IncidentsListPage implements OnInit {
       nombre: 'Terminadas'
     }
   ]
-  deshabilitarSliding: boolean  =  false
-  estado:           string  = '1'
 
   constructor(
     private accion: ActionService,
@@ -71,6 +74,7 @@ export class IncidentsListPage implements OnInit {
             this.deshabilitarSliding = true
           } else {
             this.listaIncidencias = respuesta.datos
+            this.deshabilitarSliding = false
           }
         } else {
           this.notificar.notificarComplejo('Sesión:', respuesta.mensaje, 'close-circle-outline', 'danger')
@@ -78,14 +82,36 @@ export class IncidentsListPage implements OnInit {
         }
       }
     )
+    this.cambiarEstado()
   }
 
   async nuevaIncidencia () {
+    await this.almacenar.eliminar('idRegistro')
     await this.irA.pagina('incidents-form')
   }
 
-  async verIncidencia (id: number) {
+  cambiarEstado () {
+    if (this.estado == '0') {
+      this.ocultarDeshabilitar  = true
+      this.ocultarEditar        = true
+      this.ocultarHabilitar     = false
+    } else if (this.estado == '1') {
+      this.ocultarDeshabilitar  = false
+      this.ocultarEditar        = false
+      this.ocultarHabilitar     = true
+    } else {
+      this.ocultarDeshabilitar  = true
+      this.ocultarEditar        = true
+      this.ocultarHabilitar     = true
+    }
+  }
 
+  async verIncidencia (id: number) {
+    await this.almacenar.guardar('idRegistro', id).then(
+      () => {
+        this.irA.pagina('incidents-view')
+      }
+    )
   }
 
   async editarIncidencia (id: number) {
@@ -96,12 +122,67 @@ export class IncidentsListPage implements OnInit {
     )
   }
 
-  async deshabilitarIncidencia (id: string) {
-    
+  habilitarIncidencia (id: string) {
+    let botones = [
+      {
+        text: 'Habilitar',
+        handler: async () => {
+          let datos = {
+            accion: 'habilitar',
+            id: id,
+            token:  await this.obtenerToken()
+          }
+          await this.servidor.enviar(datos, 'incidencias').subscribe(
+            (respuesta:any) => {
+              if (respuesta.estado) {
+                this.notificar.notificarComplejo('Incidencia:', respuesta.mensaje, 'checkmark-circle-outline', 'success')
+                this.cargarIncidencias()
+              } else {
+                this.notificar.notificarComplejo('Incidencia:', respuesta.mensaje, 'close-circle-outline', 'danger')
+              }
+            }
+          )
+        }
+      },
+      {
+        text: 'Cancelar',
+        role: 'cancel'
+      }
+    ]
+    this.accion.mensajeAccion('Habilitar Incidencia', '¿Estás seguro de habilitar la incidencia?', botones)
+  }
+
+  deshabilitarIncidencia (id: string) {
+    let botones = [
+      {
+        text: 'Deshabilitar',
+        handler: async () => {
+          let datos = {
+            accion: 'deshabilitar',
+            id: id,
+            token:  await this.obtenerToken()
+          }
+          await this.servidor.enviar(datos, 'incidencias').subscribe(
+            (respuesta:any) => {
+              if (respuesta.estado) {
+                this.notificar.notificarComplejo('Incidencia:', respuesta.mensaje, 'checkmark-circle-outline', 'success')
+                this.cargarIncidencias()
+              } else {
+                this.notificar.notificarComplejo('Incidencia:', respuesta.mensaje, 'close-circle-outline', 'danger')
+              }
+            }
+          )
+        }
+      }, 
+      {
+        text: 'Cancelar',
+        role: 'cancel',
+      }
+    ]
+    this.accion.mensajeAccion('Deshabilitar Incidencia', '¿Estás seguro de deshabilitar la incidencia?', botones)
   }
 
   async regresar () {
     await this.irA.atras()
   }
-
 }
