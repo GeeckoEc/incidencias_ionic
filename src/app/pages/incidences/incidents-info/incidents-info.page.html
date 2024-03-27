@@ -1,25 +1,20 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>{{titulo}}</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
       <ion-buttons slot="start">
         <ion-button (click)="salir()">
           <ion-icon slot="start" name="chevron-back-outline"></ion-icon>
         </ion-button>
       </ion-buttons>
-      <ion-title size="large">{{titulo}}</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <div id="container">
-    <ion-item class="ion-margin" lines="none" class="ion-text-center">
+    <ion-title class="ion-no-padding">{{titulo}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div id="container"  *ngIf="informacion">
+    <ion-item class="ion-margin" lines="none">
       <h3>{{informacion.asunto}}</h3>
     </ion-item>
-    <ion-list class="ion-margin">
+    <ion-list class="ion-margin ion-padding-horizontal">
       <ion-note>Descripcion</ion-note>
       <ion-text>
         <p>{{informacion.descripcion}}</p>
@@ -33,7 +28,7 @@
         <p>{{informacion.riesgos}}</p>
       </ion-text>
     </ion-list>
-    <ion-list class="ion-margin">
+    <ion-list class="ion-margin ion-padding-horizontal">
       <ion-note>Estado de la Incidencia</ion-note>
       <ion-text>
         <p>{{estadoIncidencia}}</p>

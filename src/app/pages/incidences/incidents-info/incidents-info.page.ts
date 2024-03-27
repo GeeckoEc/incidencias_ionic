@@ -31,18 +31,8 @@ export class IncidentsInfoPage implements OnInit {
     private convertir:  ConverterService
   ) { }
 
-  async ngOnInit() {
-    await this.cargarIncidencia()
-  }
-
-  async establecerPagina () {
-    let info  = await this.almacenar.obtener('informacion')
-    if (info) {
-      this.informacion = JSON.parse(info)
-    alert(JSON.stringify(this.informacion))
-    } else {
-      this.cargarIncidencia()
-    }
+  ngOnInit() {
+    this.cargarIncidencia()
   }
 
   async cargarIncidencia () {
@@ -55,12 +45,12 @@ export class IncidentsInfoPage implements OnInit {
       (respuesta: any) => {
         if (respuesta.sesion !== undefined) {
           this.notificar.notificarComplejo('Sesión', respuesta.mensaje, 'close-circle-outline', 'danger')
-          this.almacenar.eliminar('token')
+          //this.almacenar.eliminar('token')
           this.irA.pagina('home')
         }
         this.informacion  = respuesta.datos
         this.fechaIncidencia  = this.convertir.fechaLarga(respuesta.datos.fecha)
-        this.estadoIncidencia = this.listaEstados[this.informacion.estado]
+        this.estadoIncidencia = this.listaEstados[respuesta.datos.estado]
         this.almacenar.guardar('token', respuesta.token)
       }
     )
