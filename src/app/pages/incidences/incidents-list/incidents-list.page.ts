@@ -1,5 +1,6 @@
 import { Token } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
+import { LoadingController } from '@ionic/angular';
 import { ActionService } from 'src/app/services/action.service';
 import { NavigationService } from 'src/app/services/navigation.service';
 import { NotifyService } from 'src/app/services/notify.service';
@@ -40,10 +41,59 @@ export class IncidentsListPage implements OnInit {
     private notificar: NotifyService,
     private servidor: ServerService,
     private almacenar: StorageService,
+    private cargando: LoadingController,
   ) { }
 
   ngOnInit() {
-    this.cargarIncidencias()
+    this.servidorOnline()
+  }
+
+  async servidorOnline () {
+    let mensajeCargando = await this.cargando.create({
+      message: 'Verificando conexión...',
+      spinner: 'bubbles',
+      showBackdrop: true,
+      backdropDismiss: false,
+      translucent: true,
+    });
+    mensajeCargando.present();
+    this.servidor.verificarServidor().subscribe(
+      (respuesta: boolean) => {
+        if (respuesta) {
+          this.cargarIncidencias();
+          mensajeCargando.dismiss();
+        } else {
+          setTimeout(() => {
+            mensajeCargando.dismiss();
+            this.servidorOnline();
+          }, 5000);
+        }
+      }
+    );
+    /* let mensajeCargando = await this.cargando.create({
+      message: 'Verificando conexión...',
+      spinner: 'bubbles',
+      showBackdrop: true,
+      backdropDismiss: false,
+      translucent: true,
+    })
+    mensajeCargando.present()
+    await this.servidor.verificarServidor().subscribe(
+      (respuesta: any) => {
+        //alert(respuesta)
+        if (respuesta) {
+          this.cargarIncidencias()
+          mensajeCargando.dismiss()
+        } else {
+          setTimeout(
+            () => {
+              mensajeCargando.dismiss()
+              this.servidorOnline()
+            }, 5000
+          )
+        }
+      }
+    ) */
   }
 
   async obtenerToken () {
