@@ -22,6 +22,14 @@ export class IncidentsInfoPage implements OnInit {
     'Deshabilitada', 'Activa', 'Terminada'
   ]
 
+  listaAsignados: any   = [
+    {nombres: 'No hay', apellidos: 'usuarios asignados.'},
+  ]
+
+  listaActividades: any = [
+    {actividad: 'No hay actividades registradas.'},
+  ]
+
   constructor(
     private irA:        NavigationService,
     private accion:     ActionService,

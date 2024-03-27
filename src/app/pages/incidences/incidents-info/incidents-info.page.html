@@ -50,5 +50,22 @@
         <p>{{informacion.correo}}</p>
       </ion-text>
     </ion-list>
+    <ion-list class="ion-padding-horizontal">
+      <ion-list-header>
+        <ion-note>Usuarios Asignados</ion-note>
+      </ion-list-header>
+      <ion-item *ngFor="let asignados of listaAsignados">
+        <ion-label>{{asignados.nombres}} {{asignados.apellidos}}</ion-label><br>
+        <ion-note *ngIf="asignados.rol">{{asignados.rol}}</ion-note>
+      </ion-item>
+    </ion-list>
+    <ion-list class="ion-padding-horizontal">
+      <ion-list-header>
+        <ion-note>Actividades de la Incidencia</ion-note>
+      </ion-list-header>
+      <ion-item *ngFor="let actividades of listaActividades">
+        <ion-label>{{actividades.actividad}}</ion-label>
+      </ion-item>
+    </ion-list>
   </div>
 </ion-content>
