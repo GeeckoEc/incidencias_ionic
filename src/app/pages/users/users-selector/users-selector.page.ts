@@ -13,10 +13,12 @@ import { StorageService } from 'src/app/services/storage.service';
 })
 export class UsersSelectorPage implements OnInit {
 
-  titulo: string = 'Asignar Usuario'
-  mensajeCargando: HTMLIonLoadingElement
-  listaUsuarios: any
-  formulario: FormGroup
+  titulo:           string = 'Asignar Usuario'
+  mensajeCargando:  HTMLIonLoadingElement
+  listaUsuarios:    any
+  formulario:       FormGroup
+  idUsuario:        string = ''
+  busqueda:         string = ''
 
   constructor(
     private irA: NavigationService,
@@ -42,13 +44,42 @@ export class UsersSelectorPage implements OnInit {
   async establecerPagina (){
     this.mensajeCargando  = await this.notificar.mensajeCargando('Verificando conexión...')
     let datos = {
-      accion: 'usuariosHabilitados',
-      token: await this.almacenar.obtener('token')
+      accion:   'usuariosHabilitados',
+      token:    await this.almacenar.obtener('token')
     }
     await this.servidor.enviar(datos, 'usuarios').subscribe(
       (respuesta: any) => {
         this.almacenar.guardar('token', respuesta.token)
         this.listaUsuarios  = respuesta.datos
+        this.mensajeCargando.dismiss()
+      }
+    )
+  }
+
+  async seleccionarUsuario (correo: string) {
+    if (this.formulario.value.usuario == '') {
+      this.formulario.patchValue({
+        usuario: correo
+      })
+    } else {
+      this.formulario.patchValue({
+        usuario: ''
+      })
+    }
+  }
+
+  async buscar () {
+    let datos = {
+      accion:   'buscar',
+      buscar:   this.busqueda
+    }
+    await this.servidor.enviar(datos, 'usuarios').subscribe(
+      (respuesta: any) => {
+        this.listaUsuarios  = respuesta.datos
+        this.almacenar.guardar('token', respuesta.token)
+        this.formulario.patchValue({
+          usuario:  ''
+        })
         this.mensajeCargando.dismiss()
       }
     )

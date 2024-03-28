@@ -1,13 +1,39 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>users-selector</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancelar()" color="primary">
+        <ion-icon slot="start" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="ion-no-padding">{{titulo}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">users-selector</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-item >
+    <ion-searchbar placeholder="Buscar usuario" inputmode="text" animate="true" type="decimal"  [debounce]="500" (ionInput)="buscar()"></ion-searchbar>
+  </ion-item>
+  <ion-list style="height: 70%; overflow-y: auto;">
+    <ion-list-header>
+      <ion-note>Lista de Usuarios</ion-note>
+    </ion-list-header>
+    <ion-item *ngFor="let usuarios of listaUsuarios" (click)="seleccionarUsuario(usuarios.correo)" lines="false">
+      <ion-icon slot="start" name="checkmark-circle-outline" color="success" *ngIf="formulario.value.usuario == usuarios.correo"></ion-icon>
+      <ion-icon name="ellipse-outline" color="medium" *ngIf="formulario.value.usuario !== usuarios.correo"></ion-icon>
+      <ion-label>{{usuarios.nombres.split(' ')[0]}} {{usuarios.apellidos.split(' ')[0]}}</ion-label>
+      <ion-chip color="primary" mode="ios" outline="true">
+        <ion-label>{{usuarios.rol}}</ion-label>
+      </ion-chip>
+    </ion-item>
+  </ion-list>
+  <form [formGroup]="formulario" novalidate>
+    <ion-item class="ion-margin-vertical">
+      <ion-textarea labelPlacement="floating" [autoGrow]="true" formControlName="observaciones" required>
+        <div slot="label">Observaciones</div>
+      </ion-textarea>
+    </ion-item>
+    <ion-button (click)="asignar()" expand="block" [disabled]="!formulario.valid">
+      Asignar
+    </ion-button>
+  </form>
 </ion-content>

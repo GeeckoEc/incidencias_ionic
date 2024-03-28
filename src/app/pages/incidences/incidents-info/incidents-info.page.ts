@@ -84,8 +84,8 @@ export class IncidentsInfoPage implements OnInit {
     )
   }
 
-  async almacenarInfo (informacion: any) {
-    await this.almacenar.guardar('informacion', informacion);
+  asignar () {
+    this.irA.pagina('users-selector')
   }
 
   salir () {
