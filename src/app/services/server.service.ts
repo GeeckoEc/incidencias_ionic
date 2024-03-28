@@ -6,8 +6,8 @@ import { Observable, catchError, delayWhen, retry, timer, of, map} from 'rxjs';
   providedIn: 'root'
 })
 export class ServerService {
-  //private ipServer: string = '192.168.0.10'
-  private ipServer: string = '192.168.18.26'
+  private ipServer: string = '192.168.0.10'
+  //private ipServer: string = '192.168.18.26'
   private verificar: string = 'http://'+ this.ipServer + '/itil_server/controllers/enlinea.controller.php'
 
   constructor(
@@ -30,13 +30,5 @@ export class ServerService {
         return of(false);
       })
     );
-    /* return this.http.post<any>(this.verificar, {accion: 'verificarSesion'}).pipe(
-      map(response => response.available), // Suponiendo que el objeto JSON devuelto tiene un campo "available" que indica si el servidor está disponible
-      retry(3), // Intenta la solicitud hasta 3 veces
-      delayWhen(() => timer(0, 5000)), // Espera 5 segundos antes de reintentar
-      catchError(() => {
-        return of(false); // Si hay un error, el servidor no está disponible
-      })
-    ); */
   }
 }

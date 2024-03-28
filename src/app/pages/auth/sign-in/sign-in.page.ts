@@ -58,9 +58,10 @@ export class SignInPage implements OnInit {
     await this.almacenar.guardar('token', datos.token)
     await this.almacenar.guardar('nombres', datos.nombres)
     await this.almacenar.guardar('apellidos', datos.apellidos)
+    await this.almacenar.guardar('rol', datos.rol)
   }
 
   recuperarContrasena () {
-
+    this.irA.pagina('reset-password')
   }
 }

@@ -20,6 +20,7 @@ export class IncidentsFormPage implements OnInit {
   formulario:         FormGroup
   deshabilitarBoton:  boolean   = true
   listaPrioridades:   any
+  mensajeCargando: HTMLIonLoadingElement
 
   constructor(
     private construir:  FormBuilder,
@@ -46,6 +47,25 @@ export class IncidentsFormPage implements OnInit {
     this.id         = idTemporal
     this.titulo     = 'Editar'
     await this.cargarDatos()
+  }
+
+  async establecerPagina (siguiente: void) {
+    this.mensajeCargando = await this.notificar.mensajeCargando('Verificando conexión...')
+    this.servidor.verificarServidor().subscribe(
+      (respuesta: boolean) => {
+        if (respuesta) {
+          if (this.mensajeCargando){
+            this.mensajeCargando.dismiss();
+          }
+          siguiente
+          this.cargarDatos();
+        } else {
+          setTimeout(() => {
+            this.establecerPagina();
+          }, 5000);
+        }
+      }
+    );
   }
 
   async cargarDatos () {

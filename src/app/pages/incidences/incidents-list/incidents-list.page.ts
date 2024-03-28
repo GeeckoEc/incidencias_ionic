@@ -20,6 +20,7 @@ export class IncidentsListPage implements OnInit {
   listaIncidencias:     any
   deshabilitarSliding:  boolean  =  false
   estado:               string  = '1'
+  mensajeCargando: HTMLIonLoadingElement
   listaEstados:         any    = [
     {
       id:  0,
@@ -45,55 +46,26 @@ export class IncidentsListPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.servidorOnline()
+    this.establecerPagina()
   }
 
-  async servidorOnline () {
-    let mensajeCargando = await this.cargando.create({
-      message: 'Verificando conexión...',
-      spinner: 'bubbles',
-      showBackdrop: true,
-      backdropDismiss: false,
-      translucent: true,
-    });
-    mensajeCargando.present();
+  async establecerPagina (siguiente: void) {
+    this.mensajeCargando = await this.notificar.mensajeCargando('Verificando conexión...')
     this.servidor.verificarServidor().subscribe(
       (respuesta: boolean) => {
         if (respuesta) {
+          if (this.mensajeCargando){
+            this.mensajeCargando.dismiss();
+          }
+          siguiente
           this.cargarIncidencias();
-          mensajeCargando.dismiss();
         } else {
           setTimeout(() => {
-            mensajeCargando.dismiss();
-            this.servidorOnline();
+            this.establecerPagina();
           }, 5000);
         }
       }
     );
-    /* let mensajeCargando = await this.cargando.create({
-      message: 'Verificando conexión...',
-      spinner: 'bubbles',
-      showBackdrop: true,
-      backdropDismiss: false,
-      translucent: true,
-    })
-    mensajeCargando.present()
-    await this.servidor.verificarServidor().subscribe(
-      (respuesta: any) => {
-        //alert(respuesta)
-        if (respuesta) {
-          this.cargarIncidencias()
-          mensajeCargando.dismiss()
-        } else {
-          setTimeout(
-            () => {
-              mensajeCargando.dismiss()
-              this.servidorOnline()
-            }, 5000
-          )
-        }
-      }
-    ) */
   }
 
   async obtenerToken () {

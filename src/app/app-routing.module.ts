@@ -34,6 +34,18 @@ const routes: Routes = [
     path: 'incidents-info',
     loadChildren: () => import('./pages/incidences/incidents-info/incidents-info.module').then( m => m.IncidentsInfoPageModule)
   },
+  {
+    path: 'users-selector',
+    loadChildren: () => import('./pages/users/users-selector/users-selector.module').then( m => m.UsersSelectorPageModule)
+  },
+  {
+    path: 'users-form',
+    loadChildren: () => import('./pages/users/users-form/users-form.module').then( m => m.UsersFormPageModule)
+  },
+  {
+    path: 'users-list',
+    loadChildren: () => import('./pages/users/users-list/users-list.module').then( m => m.UsersListPageModule)
+  },
 
 
 ];

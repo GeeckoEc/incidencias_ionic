@@ -17,6 +17,7 @@ export class IncidentsInfoPage implements OnInit {
   titulo:           string  = 'Detalles de la Incidencia'
   fechaIncidencia:  string  = ''
   estadoIncidencia: string  = ''
+  mensajeCargando: HTMLIonLoadingElement
 
   listaEstados:     any = [
     'Deshabilitada', 'Activa', 'Terminada'
@@ -40,7 +41,26 @@ export class IncidentsInfoPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.cargarIncidencia()
+    this.establecerPagina()
+  }
+  
+  async establecerPagina (siguiente: void) {
+    this.mensajeCargando = await this.notificar.mensajeCargando('Verificando conexión...')
+    this.servidor.verificarServidor().subscribe(
+      (respuesta: boolean) => {
+        if (respuesta) {
+          if (this.mensajeCargando){
+            this.mensajeCargando.dismiss();
+          }
+          siguiente
+          this.cargarIncidencia();
+        } else {
+          setTimeout(() => {
+            this.establecerPagina();
+          }, 5000);
+        }
+      }
+    );
   }
 
   async cargarIncidencia () {

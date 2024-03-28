@@ -15,7 +15,7 @@ export class NavigationService {
    * @param pagina El nombre de la página a la que se necesita ir.
    */
   public pagina (pagina: string) {
-    this.irA.navigateRoot(pagina/* , {animated: true,} */)
+    this.irA.navigateRoot(pagina, {animated: true,})
   }
 
   /** Permite navigar hacia una página anterior.

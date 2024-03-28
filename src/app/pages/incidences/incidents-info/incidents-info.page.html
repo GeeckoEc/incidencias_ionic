@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
       <ion-buttons slot="start">
-        <ion-button (click)="salir()">
+        <ion-button (click)="salir()" color="primary">
           <ion-icon slot="start" name="chevron-back-outline"></ion-icon>
         </ion-button>
       </ion-buttons>
@@ -33,6 +33,10 @@
       <ion-text>
         <p>{{estadoIncidencia}}</p>
       </ion-text>
+      <ion-note>Prioridad de la Incidencia</ion-note>
+      <ion-text>
+        <p>{{informacion.prioridad}}</p>
+      </ion-text>
       <ion-note>Fecha de la Incidencia</ion-note>
       <ion-text>
         <p>{{fechaIncidencia}}</p>
@@ -50,21 +54,29 @@
         <p>{{informacion.correo}}</p>
       </ion-text>
     </ion-list>
-    <ion-list class="ion-padding-horizontal">
+    <ion-list class="ion-margin">
       <ion-list-header>
         <ion-note>Usuarios Asignados</ion-note>
+        <div style="flex-grow: 1;"></div> <!-- Esto es un divisor flexible -->
+        <ion-button  fill="solid" class="ion-padding-horizontal">
+          <ion-icon class="ion-margin-horizontal" slot="start" name="add"></ion-icon>
+        </ion-button>
       </ion-list-header>
       <ion-item *ngFor="let asignados of listaAsignados">
         <ion-label>{{asignados.nombres}} {{asignados.apellidos}}</ion-label><br>
         <ion-note *ngIf="asignados.rol">{{asignados.rol}}</ion-note>
       </ion-item>
     </ion-list>
-    <ion-list class="ion-padding-horizontal">
-      <ion-list-header>
+    <ion-list class="ion-margin">
+      <ion-list-header class="ion-align-items-center">
         <ion-note>Actividades de la Incidencia</ion-note>
+        <div style="flex-grow: 1;"></div> <!-- Esto es un divisor flexible -->
+        <ion-button fill="solid" class="ion-padding-horizontal">
+          <ion-icon class="ion-margin-horizontal" name="add"></ion-icon>
+        </ion-button>
       </ion-list-header>
-      <ion-item *ngFor="let actividades of listaActividades">
-        <ion-label>{{actividades.actividad}}</ion-label>
+      <ion-item *ngFor="let actividad of listaActividades">
+        <ion-label>{{actividad.actividad}}</ion-label>
       </ion-item>
     </ion-list>
   </div>
