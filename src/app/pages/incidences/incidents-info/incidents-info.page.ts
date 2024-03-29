@@ -17,13 +17,13 @@ export class IncidentsInfoPage implements OnInit {
   titulo:           string  = 'Detalles de la Incidencia'
   fechaIncidencia:  string  = ''
   estadoIncidencia: string  = ''
-  mensajeCargando: HTMLIonLoadingElement
+  mensajeCargando:  HTMLIonLoadingElement
 
   listaEstados:     any = [
     'Deshabilitada', 'Activa', 'Terminada'
   ]
 
-  listaAsignados: any   = [
+  listaAsignados:   any   = [
     {nombres: 'No hay', apellidos: 'usuarios asignados.'},
   ]
 
@@ -44,15 +44,11 @@ export class IncidentsInfoPage implements OnInit {
     this.establecerPagina()
   }
   
-  async establecerPagina (siguiente: void) {
+  async establecerPagina () {
     this.mensajeCargando = await this.notificar.mensajeCargando('Verificando conexión...')
-    this.servidor.verificarServidor().subscribe(
+    await this.servidor.verificarServidor().subscribe(
       (respuesta: boolean) => {
         if (respuesta) {
-          if (this.mensajeCargando){
-            this.mensajeCargando.dismiss();
-          }
-          siguiente
           this.cargarIncidencia();
         } else {
           setTimeout(() => {
@@ -80,8 +76,31 @@ export class IncidentsInfoPage implements OnInit {
         this.fechaIncidencia  = this.convertir.fechaLarga(respuesta.datos.fecha)
         this.estadoIncidencia = this.listaEstados[respuesta.datos.estado]
         this.almacenar.guardar('token', respuesta.token)
+          this.cargarAsignados()
       }
     )
+  }
+
+  async cargarAsignados () {
+    //this.notificar.mensajeCargando('Cargando asignados...')
+     let datos = {
+       accion: 'listaEstado',
+       estado: 1,
+       token:  await this.almacenar.obtener('token')
+     }
+     await this.servidor.enviar(datos, 'asignaciones').subscribe(
+       (respuesta: any) => {
+        if (respuesta.sesion !== undefined) {
+          this.mensajeCargando.dismiss()
+          this.notificar.notificarComplejo('Sesión', respuesta.mensaje, 'close-circle-outline', 'danger')
+          this.irA.pagina('home')
+        }
+        if (respuesta.datos !== null) {
+          this.listaAsignados = respuesta.datos
+          this.mensajeCargando.dismiss()
+        }
+       }
+     )
   }
 
   asignar () {

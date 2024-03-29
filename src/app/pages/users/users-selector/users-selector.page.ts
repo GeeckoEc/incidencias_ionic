@@ -41,14 +41,26 @@ export class UsersSelectorPage implements OnInit {
     })
   }
 
+  validarSesion (respuesta: any) {
+    if (respuesta.sesion !== undefined) {
+      this.notificar.notificarComplejo('Sesión', respuesta.mensaje, 'close-circle-outline', 'danger')
+      this.irA.pagina('home')
+      return
+    }
+  }
+
   async establecerPagina (){
-    this.mensajeCargando  = await this.notificar.mensajeCargando('Verificando conexión...')
+    this.mensajeCargando  = await this.notificar.mensajeCargando('Verificando conexión...*')
     let datos = {
       accion:   'usuariosHabilitados',
       token:    await this.almacenar.obtener('token')
     }
     await this.servidor.enviar(datos, 'usuarios').subscribe(
       (respuesta: any) => {
+        this.validarSesion(respuesta)
+        this.almacenar.guardar('token', respuesta.token)
+        this.listaUsuarios  = respuesta.datos
+        this.mensajeCargando.dismiss()
         this.almacenar.guardar('token', respuesta.token)
         this.listaUsuarios  = respuesta.datos
         this.mensajeCargando.dismiss()
@@ -106,9 +118,10 @@ export class UsersSelectorPage implements OnInit {
     let datos = {
       accion:           'nuevo',
       usuario:          this.formulario.value.usuario,
-      obserservaciones: this.formulario.value.observaciones,
+      observaciones:    this.formulario.value.observaciones,
       incidencia:       await this.almacenar.obtener('idRegistro'),
       token:            await this.almacenar.obtener('token'),
+      estatus:          1
     }
     await this.servidor.enviar(datos, 'asignaciones').subscribe(
       (respuesta: any) => {
