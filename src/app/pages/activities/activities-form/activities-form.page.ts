@@ -32,6 +32,7 @@ export class ActivitiesFormPage implements OnInit {
 
   async ngOnInit() {
     this.mensajeCargando = await this.notificar.mensajeCargando('Cargando...')
+    await this.cargarEstatus()
     await this.crearFormulario()
     await this.establecerPagina()
     await this.mensajeCargando.dismiss()
@@ -46,26 +47,22 @@ export class ActivitiesFormPage implements OnInit {
     })
   }
 
-
-  // REVISAR TODO ESTO
   async establecerPagina () {
     if (await this.almacenar.obtener('idActividad') !== undefined) {
       this.titulo = 'Editar'
-      let idActividad = await this.almacenar.obtener('idActividad')
       let datos = {
-        accion: 'obtener',
+        accion: 'cargar',
         token:  await this.almacenar.obtener('token'),
-        id:     idActividad
+        id:     await this.almacenar.obtener('idActividad')
       }
       await this.servidor.enviar(datos, 'actividades').subscribe(
         (respuesta: any) => {
           this.almacenar.guardar('token', respuesta.token)
-          let actividad = respuesta.datos[0]
           this.formulario.patchValue({
-            inicio:       this.convertir.fecha(actividad.inicio),
-            fin:          this.convertir.fecha(actividad.fin),
-            descripcion:  actividad.descripcion,
-            estatus:      actividad.estatus,
+            inicio:       this.convertir.fechaParaDatePicker(respuesta.fecha_inicio),
+            fin:          this.convertir.fechaParaDatePicker(respuesta.fecha_fin),
+            descripcion:  respuesta.descripcion,
+            estatus:      respuesta.fk_estatus,
           })
         }
       )
@@ -85,4 +82,29 @@ export class ActivitiesFormPage implements OnInit {
     )
   }
 
+  async Guardar () {
+    let datos = {
+      accion:       'nuevo',
+      token:        await this.almacenar.obtener('token'),
+      descripcion:  this.formulario.value.descripcion,
+      inicio:       this.convertir.fechaParaSQL(this.formulario.value.inicio),
+      fin:          this.convertir.fechaParaSQL(this.formulario.value.fin),
+      estatus:      this.formulario.value.estatus,
+      asignacion:   await this.almacenar.obtener('idAsignacion')
+    }
+    await this.servidor.enviar(datos, 'actividades').subscribe(
+      (respuesta: any) => {
+        if (respuesta.estad) {
+          this.notificar.notificarComplejo('Actividad', respuesta.mensaje, 'checkmark-circle-outline', 'success')
+          this.irA.atras()
+        } else {
+          this.notificar.notificarComplejo('Actividad', respuesta.mensaje, 'close-circle-outline', 'danger')
+        }
+      }
+    )
+  }
+
+  cancelar () {
+    this.irA.atras()
+  }
 }

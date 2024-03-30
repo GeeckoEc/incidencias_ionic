@@ -6,8 +6,10 @@ import { Observable, catchError, delayWhen, retry, timer, of, map} from 'rxjs';
   providedIn: 'root'
 })
 export class ServerService {
-  private ipServer: string = '192.168.0.10'
+  private ipServer: string = '192.168.0.9'
+  //private ipServer: string = '192.168.0.10'
   //private ipServer: string = '192.168.18.26'
+  //private ipServer: string = '192.168.68.137'
   private verificar: string = 'http://'+ this.ipServer + '/itil_server/controllers/enlinea.controller.php'
 
   constructor(

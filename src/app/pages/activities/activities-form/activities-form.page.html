@@ -1,13 +1,41 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>activities-form</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancelar()" color="primary">
+        <ion-icon slot="start" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="ion-no-padding">{{titulo}} Actividad</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">activities-form</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <form [formGroup]="formulario" novalidate *ngIf="formulario">
+    <ion-item class="ion-margin">
+      <ion-textarea labelPlacement="floating" formControlName="descripcion" [autoGrow]="true">
+        <div slot="label">Descripción</div>
+      </ion-textarea>
+    </ion-item>
+    <!-- <ion-item class="ion-margin-horizontal ion-padding-vertical"> -->
+      <ion-datetime display-format="DD.MM.YYYY HH:mm" formControlName="inicio" class="ion-margin">
+        <span slot="title">Fecha de Inicio</span>
+        <span slot="time-label">Tiempo</span>
+      </ion-datetime>
+    <!-- </ion-item> -->
+    <!-- <ion-item class="ion-margin-horizontal ion-padding-vertical"> -->
+      <ion-datetime display-format="DD.MM.YYYY HH:mm" formControlName="fin" class="ion-margin">
+      <span slot="title">Fecha de Finalización</span>
+      <span slot="time-label">Tiempo</span>
+    </ion-datetime>
+    <!-- </ion-item> -->
+    <ion-item class="ion-margin">
+      <ion-select value="1" interface="popover" formControlName="estatus">
+        <div slot="label">Estatus de la Acción</div>
+        <ion-select-option *ngFor="let estatus of listaEstatus" value="{{estatus.id}}">{{estatus.estatus}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-button class="ion-margin" expand="block" [disabled]="!formulario.valid">
+      Guardar
+    </ion-button>
+  </form>
 </ion-content>

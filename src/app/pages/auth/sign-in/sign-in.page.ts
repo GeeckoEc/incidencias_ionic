@@ -59,6 +59,7 @@ export class SignInPage implements OnInit {
     await this.almacenar.guardar('nombres', datos.nombres)
     await this.almacenar.guardar('apellidos', datos.apellidos)
     await this.almacenar.guardar('rol', datos.rol)
+    await this.almacenar.guardar('correo', this.sesionForm.value.correo)
   }
 
   recuperarContrasena () {

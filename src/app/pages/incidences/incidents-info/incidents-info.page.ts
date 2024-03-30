@@ -40,12 +40,27 @@ export class IncidentsInfoPage implements OnInit {
     private convertir:  ConverterService
   ) { }
 
-  ngOnInit() {
-    this.establecerPagina()
+  async ngOnInit() {
+    this.mensajeCargando  = await this.notificar.mensajeCargando('Cargando...')
+    await this.verificarServidor()
+  }
+
+  async verificarServidor () {
+    await this.servidor.verificarServidor().subscribe(
+      (respuesta: boolean) => {
+        if (respuesta) {
+          this.establecerPagina()
+          this.mensajeCargando.dismiss()
+        } else {
+          setTimeout(() => {
+            this.verificarServidor()
+          }, 5000);
+        }
+      }
+    )
   }
   
   async establecerPagina () {
-    this.mensajeCargando = await this.notificar.mensajeCargando('Verificando conexión...')
     await this.servidor.verificarServidor().subscribe(
       (respuesta: boolean) => {
         if (respuesta) {
@@ -69,7 +84,6 @@ export class IncidentsInfoPage implements OnInit {
       (respuesta: any) => {
         if (respuesta.sesion !== undefined) {
           this.notificar.notificarComplejo('Sesión', respuesta.mensaje, 'close-circle-outline', 'danger')
-          //this.almacenar.eliminar('token')
           this.irA.pagina('home')
         }
         this.informacion  = respuesta.datos
@@ -82,7 +96,6 @@ export class IncidentsInfoPage implements OnInit {
   }
 
   async cargarAsignados () {
-    //this.notificar.mensajeCargando('Cargando asignados...')
      let datos = {
        accion: 'listaEstado',
        estado: 1,
@@ -97,7 +110,6 @@ export class IncidentsInfoPage implements OnInit {
         }
         if (respuesta.datos !== null) {
           this.listaAsignados = respuesta.datos
-          this.mensajeCargando.dismiss()
         }
        }
      )
@@ -105,6 +117,10 @@ export class IncidentsInfoPage implements OnInit {
 
   asignar () {
     this.irA.pagina('users-selector')
+  }
+
+  crearActividad () {
+    this.irA.pagina('activities-form')
   }
 
   salir () {
