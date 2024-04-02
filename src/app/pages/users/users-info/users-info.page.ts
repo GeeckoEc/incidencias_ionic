@@ -51,7 +51,7 @@ export class UsersInfoPage implements OnInit {
         this.informacion = respuesta.datos
         this.almacenar.guardar('token', respuesta.token)
         this.fechaNacimiento  = this.convertir.fechaCorta(this.informacion.fecha_nacimiento)
-        this.fechaRegistro  = this.convertir.fechaCorta(this.informacion.fecha_creacion)
+        this.fechaRegistro  = this.convertir.fechaLarga(this.informacion.fecha_creacion)
         this.estadoUsuario    = this.listaEstados[this.informacion.estado]
         this.mensajeCargando.dismiss()
       }
