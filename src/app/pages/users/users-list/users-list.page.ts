@@ -12,72 +12,133 @@ import { StorageService } from 'src/app/services/storage.service';
 })
 export class UsersListPage implements OnInit {
 
-  listaUsuarios:    any
-  mensajeCargando:  HTMLIonLoadingElement
-  buscar:           string = ''
-  titulo:           string = 'Usuarios Registrados'
-  estado:           string = '1'
-  miCorreo:         string =  ''
-  listaEstados:     any = [
-    {id: 0, nombre: 'Deshabilitado', accion: 'usuariosDeshabilitados'},
-    {id: 1, nombre: 'Habilitado', accion: 'usuariosHabilitados'}
+  titulo:               string = 'Usuarios'
+  estado:               number  = 1
+  mensajeCargando:      HTMLIonLoadingElement
+  ocultarEditar:        boolean = false
+  ocultarDeshabilitar:  boolean = false
+  ocultarHabilitar:     boolean = true
+  listaUsuarios:        any
+  listaEstados:         any = [
+    {id: 1, nombre: 'Habilitados', accion: 'usuariosHabilitados'},
+    {id: 0, nombre: 'Deshabilitados', accion: 'usuariosDeshabilitados'},
   ]
 
   constructor(
-    private irA:      NavigationService,
-    private servidor: ServerService,
-    private almacenar: StorageService,
-    private notificar: NotifyService,
-    private accion:    ActionService,
+    private irA:        NavigationService,
+    private servidor:   ServerService,
+    private almacenar:  StorageService,
+    private notificar:  NotifyService,
+    private accion:     ActionService,
   ) { }
 
   async ngOnInit() {
-    this.mensajeCargando = await this.notificar.mensajeCargando('Cargando...')
-    await this.establecerPagina()
-  }
-
-  async establecerPagina () {
-    this.miCorreo = await this.almacenar.obtener('correo')
-    if ( await this.servidor.verificarServidor()) {
-      this.cargarUsuarios()
-    } else {
-      setTimeout(() => {
-        this.establecerPagina()
-      }, 5000);
-    }
+    this.cargarUsuarios()
   }
 
   async cargarUsuarios () {
+    this.mensajeCargando  = await this.notificar.mensajeCargando('Cargando usuarios...')
     let datos = {
-      accion: this.listaEstados[parseInt(this.estado)].accion,
+      accion: this.obtenerAccion(),
       token:  await this.almacenar.obtener('token')
     }
     await this.servidor.enviar(datos, 'usuarios').subscribe(
-      (respuesta: any) => {
+      (respuesta:any) => {
         if (respuesta.sesion !== undefined) {
-          this.mensajeCargando.dismiss()
           this.notificar.notificarComplejo('Sesión', respuesta.mensaje, 'close-circle-outline', 'danger')
-          alert('Sesión terminada.')
           this.irA.pagina('home')
-          return
+          this.mensajeCargando.dismiss()
+        }
+        if (respuesta.datos !== null) {
+          this.almacenar.guardar('token', respuesta.token)
+          this.listaUsuarios  = respuesta.datos
+        } else {
+          this.listaUsuarios  = [{
+            correo: null,
+            nombres: 'No hay usuarios',
+            apellidos: ' deshabilitados.',
+          }]
+          this.almacenar.guardar('token', respuesta.token)
+        }
+        if (this.estado == 0) {
+          this.ocultarEditar        = true
+          this.ocultarDeshabilitar  = true
+          this.ocultarHabilitar     = false
+        }else {
+          this.ocultarEditar        = false
+          this.ocultarDeshabilitar  = false
+          this.ocultarHabilitar     = true
         }
         this.mensajeCargando.dismiss()
-        if (respuesta.datos == null) {
-          this.listaUsuarios  = {
-            id:       0,
-            nombres:  'No hay usuarios registrados.',
-            apellidos: '',
-          }
-        } else {
-          this.listaUsuarios = respuesta.datos
-        }
-        this.almacenar.guardar('token', respuesta.token)
       }
     )
   }
 
-  async busqueda () {
+  nuevoUsuario () {
+    this.almacenar.eliminar('correoUsuario')
+    this.irA.pagina('users-form')
+  }
 
+  async infoUsuario (correo:string) {
+    await this.almacenar.guardar('correoUsuario', correo).then(
+      () => {
+        this.irA.pagina('users-info')
+      }
+    )
+
+  }
+
+  async editarUsuario (correo:string) {
+    await this.almacenar.guardar('correoUsuario', correo).then(
+      () => {
+        this.irA.pagina('users-form')
+      }
+    )
+  }
+
+  async deshabilitarUsuario (correo:string) {
+    let botones = [
+      {
+        text: 'Deshabilitar',
+        handler: () => {}
+      },
+      {
+        text: 'Cancelar',
+        role: 'cancel',
+      }
+    ]
+    await this.accion.mensajeAccion('Deshabilitar Usuario', '¿Desea deshabilitar este usuario?', botones)
+  }
+
+  async habilitarUsuario (correo:string) {
+    let botones = [
+      {
+        text: 'Habilitar',
+        handler: () => {}
+      },
+      {
+        text: 'Cancelar',
+        role: 'cancel',
+      }
+    ]
+    await this.accion.mensajeAccion('Habilitar Usuario', '¿Desea habilitar este usuario?', botones)
+  }
+
+  async buscar (evento:any) {
+    let datos = {
+      accion: 'buscar',
+      buscar: evento.target.value,
+      token:  await this.almacenar.obtener('token')
+    }
+  }
+
+  obtenerAccion () {
+    interface Estados {
+      id:     number,
+      nombre: string,
+      accion: string
+    }
+    return this.listaEstados.find((item:Estados) => item.id == this.estado).accion
   }
 
   salir () {

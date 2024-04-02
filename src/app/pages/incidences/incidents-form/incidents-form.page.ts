@@ -18,7 +18,7 @@ export class IncidentsFormPage implements OnInit {
   id:                 number    = 0
   titulo:             string    = 'Nueva'
   formulario:         FormGroup
-  deshabilitarBoton:  boolean   = true
+  //deshabilitarBoton:  boolean   = true
   listaPrioridades:   any
   mensajeCargando: HTMLIonLoadingElement
 

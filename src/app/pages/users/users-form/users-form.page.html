@@ -1,13 +1,66 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>users-form</ion-title>
+    <ion-title>{{titulo}} Usuario</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">users-form</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <form [formGroup]="formulario" novalidate>
+    <ion-item class="ion-margin">
+      <ion-input type="email" labelPlacement="floating" formControlName="correo" [disabled]="deshabilitarCorreo">
+        <div slot="label">Correo electrónico</div>
+      </ion-input>
+    </ion-item>
+    <ion-item class="ion-margin">
+      <ion-select formControlName="rol" placeholder="Seleccione un rol" interface="popover">
+        <div slot="label">Rol del usuario</div>
+        <ion-select-option *ngFor="let roles of listaRoles" [value]="roles.id">{{roles.rol}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item class="ion-margin">
+      <ion-input type="text" labelPlacement="floating" formControlName="nombres">
+        <div slot="label">Nombres</div>
+      </ion-input>
+    </ion-item>
+    <ion-item class="ion-margin">
+      <ion-input type="text" labelPlacement="floating" formControlName="apellidos">
+        <div slot="label">Apellidos</div>
+      </ion-input>
+    </ion-item>
+    <ion-item class="ion-margin">
+      <ion-list>
+        <ion-radio-group formControlName="genero">
+          <div slot="label">Género</div>
+          <ion-item *ngFor="let generos of listaGeneros" lines="none">
+            <ion-radio value="{{generos.id}}" labelPlacement="end" justify="start">{{generos.genero}}</ion-radio>
+          </ion-item>
+        </ion-radio-group>
+      </ion-list>
+    </ion-item>
+    <ion-list class="ion-margin ion-padding">
+      <ion-label class="ion-margin-bottom">Fecha de nacimiento</ion-label>
+      <ion-datetime display-format="DD.MM.YYYY" presentation="date" formControlName="fecha_nacimiento" class="ion-margin-top"></ion-datetime>
+    </ion-list>
+    <ion-item class="ion-margin">
+      <ion-input type="text" formControlName="cedula" labelPlacement="floating">
+        <div slot="label">Número de cédula</div>
+      </ion-input>
+    </ion-item>
+    <ion-item class="ion-margin">
+      <ion-input type="text" formControlName="celular" labelPlacement="floating">
+        <div slot="label">Número celular</div>
+      </ion-input>
+    </ion-item>
+    <ion-item class="ion-margin">
+      <ion-textarea formControlName="direccion" labelPlacement="floating" [autoGrow]="true">
+        <div slot="label">Dirección</div>
+      </ion-textarea>
+    </ion-item>
+    <ion-button (click)="guardar()" expand="block" class="ion-margin" color="primary" [disabled]="!formulario.valid">
+      Guardar
+    </ion-button>
+    <ion-button (click)="cancelar()" expand="block" class="ion-margin" color="medium">
+      Cancelar
+    </ion-button>
+  </form>
 </ion-content>

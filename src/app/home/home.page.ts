@@ -23,7 +23,6 @@ export class HomePage {
   async token () {
     await this.almacenar.obtener('token').then(
       (datos: any) => {
-        //console.log(datos)
         setTimeout(
           () => {
             this.verificarSesion(datos)
@@ -43,10 +42,12 @@ export class HomePage {
       token: token
     }
     await this.servidor.enviar(datos, 'autenticar').subscribe(
-      (datos: any) => {
-        if (datos.estado == true) {
+      (respuesta: any) => {
+        if (respuesta.estado) {
+          this.almacenar.guardar('token', respuesta.token)
           this.ir.pagina('main-start')
         } else {
+          this.almacenar.eliminar('token')
           this.ir.pagina('sign-in')
         }
       }

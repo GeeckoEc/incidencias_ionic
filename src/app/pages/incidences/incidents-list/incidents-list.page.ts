@@ -14,21 +14,21 @@ import { StorageService } from 'src/app/services/storage.service';
 })
 export class IncidentsListPage implements OnInit {
 
-  ocultarHabilitar:     boolean     = true
-  ocultarDeshabilitar:  boolean  = false
-  ocultarEditar:        boolean        = false
+  ocultarHabilitar:     boolean = true
+  ocultarDeshabilitar:  boolean = false
+  ocultarEditar:        boolean = false
   listaIncidencias:     any
-  deshabilitarSliding:  boolean  =  false
-  estado:               string  = '1'
+  deshabilitarSliding:  boolean =  false
+  estado:               number  = 1
   mensajeCargando: HTMLIonLoadingElement
   listaEstados:         any    = [
     {
-      id:  0,
-      nombre: 'Deshabilitadas'
-    },
-    {
       id:  1,
       nombre: 'Activas'
+    },
+    {
+      id:  0,
+      nombre: 'Deshabilitadas'
     },
     {
       id:  2,
@@ -46,7 +46,7 @@ export class IncidentsListPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.establecerPagina()
+    this.cargarIncidencias()
   }
 
   async establecerPagina (siguiente: void) {
@@ -78,6 +78,7 @@ export class IncidentsListPage implements OnInit {
   }
 
   async cargarIncidencias () {
+    this.mensajeCargando  = await this.notificar.mensajeCargando('Cargando incidencias...')
     let datos = {
       accion: 'lista',
       estado: this.estado,
@@ -85,23 +86,26 @@ export class IncidentsListPage implements OnInit {
     }
     await this.servidor.enviar(datos, 'incidencias').subscribe(
       (respuesta: any) => {
-        if (respuesta.estado) {
-          this.almacenar.guardar('token', respuesta.token)
-          let cantidad = respuesta.datos
-          if (cantidad.length == 0) {
-            this.listaIncidencias = [{
-              asunto: 'No hay incidencias '+ this.listaEstados[parseInt(this.estado)].nombre.toLowerCase() +'.',
-              id: 0,
-            }]
-            this.deshabilitarSliding = true
-          } else {
-            this.listaIncidencias = respuesta.datos
-            this.deshabilitarSliding = false
-          }
-        } else {
+        if (respuesta.sesion !== undefined) {
           this.notificar.notificarComplejo('Sesión:', respuesta.mensaje, 'close-circle-outline', 'danger')
           this.irA.pagina('home')
+          this.mensajeCargando.dismiss()
+          return
         }
+        this.almacenar.guardar('token', respuesta.token)
+        let cantidad = respuesta.datos
+        let estadoSeleccionado  = this.listaEstados.findIndex((item:any) => item.id == this.estado)
+        if (cantidad.length == 0) {
+          this.listaIncidencias = [{
+            asunto: 'No hay incidencias '+ this.listaEstados[estadoSeleccionado].nombre.toLowerCase() +'.',
+            id: 0,
+          }]
+          this.deshabilitarSliding = true
+        } else {
+          this.listaIncidencias = respuesta.datos
+          this.deshabilitarSliding = false
+        }
+        this.mensajeCargando.dismiss()
       }
     )
     this.cambiarEstado()
@@ -113,11 +117,11 @@ export class IncidentsListPage implements OnInit {
   }
 
   cambiarEstado () {
-    if (this.estado == '0') {
+    if (this.estado == 0) {
       this.ocultarDeshabilitar  = true
       this.ocultarEditar        = true
       this.ocultarHabilitar     = false
-    } else if (this.estado == '1') {
+    } else if (this.estado == 1) {
       this.ocultarDeshabilitar  = false
       this.ocultarEditar        = false
       this.ocultarHabilitar     = true

@@ -50,6 +50,10 @@ const routes: Routes = [
     path: 'activities-form',
     loadChildren: () => import('./pages/activities/activities-form/activities-form.module').then( m => m.ActivitiesFormPageModule)
   },
+  {
+    path: 'users-info',
+    loadChildren: () => import('./pages/users/users-info/users-info.module').then( m => m.UsersInfoPageModule)
+  },
 
 
 ];
