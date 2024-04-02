@@ -1,13 +1,53 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>users-info</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="salir()" color="primary">
+        <ion-icon slot="start" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="ion-no-padding">{{titulo}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">users-info</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" *ngIf="informacion">
+  <ion-item class="ion-margin">
+    <h3>{{informacion.nombres.split(' ')[0]}} {{informacion.apellidos.split(' ')[0]}}</h3>
+  </ion-item>
+  <ion-list class="ion-margin ion-padding-horizontal">
+    <ion-list-header class="ion-no-padding">
+      <ion-label>INFORMACIÓN PERSONAL</ion-label>
+    </ion-list-header>
+    <ion-note>Nombres</ion-note>
+    <ion-text><p>{{informacion.nombres}}</p></ion-text>
+    <ion-note>Apellidos</ion-note>
+    <ion-text><p>{{informacion.apellidos}}</p></ion-text>
+    <ion-note>Género</ion-note>
+    <ion-text><p>{{informacion.genero}}</p></ion-text>
+    <ion-note>Fecha de Nacimiento</ion-note>
+    <ion-text><p>{{fechaNacimiento}}</p></ion-text>
+    <ion-note>Edad</ion-note>
+    <ion-text><p>{{informacion.edad}} años</p></ion-text>
+  </ion-list>
+  <ion-list class="ion-margin ion-padding-horizontal">
+    <ion-list-header class="ion-no-padding">
+      <ion-label>INFORMACIÓN DE CONTACTO</ion-label>
+    </ion-list-header>
+    <ion-note>Correo</ion-note>
+    <ion-text><p>{{informacion.correo}}</p></ion-text>
+    <ion-note>Celular</ion-note>
+    <ion-text><p>{{informacion.celular}}</p></ion-text>
+  </ion-list>
+  <ion-list class="ion-margin ion-padding-horizontal">
+    <ion-list-header class="ion-no-padding">
+      <ion-label>INFORMACIÓN DEL USUARIO</ion-label>
+    </ion-list-header>
+    <ion-note>Estado</ion-note>
+    <ion-text><p>{{estadoUsuario}}</p></ion-text>
+    <ion-note>Rol</ion-note>
+    <ion-text><p>{{informacion.rol}}</p></ion-text>
+    <ion-note>Fecha de Registro</ion-note>
+    <ion-text><p>{{fechaRegistro}}</p></ion-text>
+    
+
+  </ion-list>
 </ion-content>

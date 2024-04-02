@@ -52,13 +52,10 @@ export class UsersFormPage implements OnInit {
 
   async establecerFormulario () {
     await this.cargarGeneros()
-    await this.cargarRoles().then(
-      () => {
-        if (this.almacenar.obtener('correoUsuario') !== null) {
-          this.cargarDatos()
-        }
-      }
-    )
+    await this.cargarRoles()
+    if (await this.almacenar.obtener('correoUsuario') !== null) {
+      await this.cargarDatos()
+    }
   }
 
   async cargarDatos () {

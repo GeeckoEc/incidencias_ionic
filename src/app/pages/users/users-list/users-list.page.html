@@ -13,7 +13,7 @@
     </ion-buttons>
   </ion-toolbar>
   <ion-toolbar>
-    <ion-searchbar placeholder="Buscar usuario" inputmode="text" type="text" (ionChange)="buscar($event)" [debounce]="500"></ion-searchbar>
+    <ion-searchbar id="busqueda" placeholder="Buscar usuario" inputmode="text" type="text" (ionInput)="buscar($event)" [debounce]="800"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 

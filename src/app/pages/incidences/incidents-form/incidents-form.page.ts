@@ -72,11 +72,11 @@ export class IncidentsFormPage implements OnInit {
     let datos = {
       accion: 'cargar',
       id: this.id,
-      token: await this.obtenerToken()
+      token: await this.almacenar.obtener('token')
     }
     await this.servidor.enviar(datos, 'incidencias').subscribe(
       (respuesta: any) => {
-        this.almacenarToken(respuesta.token)
+        this.almacenar.guardar('token', respuesta.token)
         this.formulario.patchValue(respuesta.datos)
       }
     )
@@ -96,7 +96,7 @@ export class IncidentsFormPage implements OnInit {
   async cargarPrioridades () {
     let datos = {
       accion: 'listaCompleta',
-      token:  await this.obtenerToken()
+      token:  await this.almacenar.obtener('token')
     }
     await this.servidor.enviar(datos, 'prioridades').subscribe(
       (respuesta: any) => {
@@ -104,19 +104,6 @@ export class IncidentsFormPage implements OnInit {
         this.listaPrioridades = respuesta.datos
       }
     )
-  }
-
-  async almacenarToken (token: string) {
-    await this.almacenar.guardar('token', token)
-  }
-
-  async obtenerToken () {
-    let datos = await this.almacenar.obtener('token')
-    if (datos == null) {
-      this.irA.pagina('home')
-      return
-    }
-    return datos
   }
 
   async cancelar () {
@@ -137,7 +124,7 @@ export class IncidentsFormPage implements OnInit {
   async guardar () {
     let datos = {
       accion:       this.titulo.toLowerCase(),
-      token:        await this.obtenerToken(),
+      token:        await this.almacenar.obtener('token'),
       id:           this.id,
       asunto:       this.formulario.value.asunto,
       descripcion:  this.formulario.value.descripcion,
@@ -148,7 +135,7 @@ export class IncidentsFormPage implements OnInit {
     }
     await this.servidor.enviar(datos, 'incidencias').subscribe(
       (respuesta: any) => {
-        if (respuesta !== undefined) {
+        if (respuesta.sesion !== undefined) {
           this.notificar.notificarComplejo('Sesión', respuesta.mensaje, 'close-circle-outline', 'danger')
           this.irA.pagina('home')
         }

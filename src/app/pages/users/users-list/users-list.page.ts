@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { IonInput } from '@ionic/angular';
 import { ActionService } from 'src/app/services/action.service';
 import { NavigationService } from 'src/app/services/navigation.service';
 import { NotifyService } from 'src/app/services/notify.service';
@@ -11,6 +12,8 @@ import { StorageService } from 'src/app/services/storage.service';
   styleUrls: ['./users-list.page.scss'],
 })
 export class UsersListPage implements OnInit {
+  
+  @ViewChild('busqueda') busqueda: IonInput
 
   titulo:               string = 'Usuarios'
   estado:               number  = 1
@@ -100,7 +103,35 @@ export class UsersListPage implements OnInit {
     let botones = [
       {
         text: 'Deshabilitar',
-        handler: () => {}
+        handler: async () => {
+          this.mensajeCargando  = await this.notificar.mensajeCargando('Deshabilitando usuario...')
+          let datos = {
+            accion: 'deshabilitar',
+            correo: correo,
+            token:  await this.almacenar.obtener('token')
+          }
+          await this.servidor.enviar(datos, 'usuarios').subscribe(
+            (respuesta:any) => {
+              if (respuesta.sesion !== undefined) {
+                this.notificar.notificarComplejo('Sesión', respuesta.mensaje, 'close-circle-outline', 'danger')
+                this.irA.pagina('home')
+                this.mensajeCargando.dismiss()
+                return
+              }
+              if (respuesta.estado) {
+                this.mensajeCargando.dismiss()
+                this.notificar.notificarComplejo('Deshabilitar Usuario', respuesta.mensaje, 'checkmark-circle-outline', 'success')
+                this.almacenar.guardar('token', respuesta.token)
+                this.cargarUsuarios()
+
+              } else {
+                this.notificar.notificarComplejo('Deshabilitar Usuario', respuesta.mensaje, 'close-circle-outline', 'danger')
+                this.almacenar.guardar('token', respuesta.token)
+                this.mensajeCargando.dismiss()
+              }
+            }
+          )
+        }
       },
       {
         text: 'Cancelar',
@@ -114,7 +145,34 @@ export class UsersListPage implements OnInit {
     let botones = [
       {
         text: 'Habilitar',
-        handler: () => {}
+        handler: async () => {
+          this.mensajeCargando = await this.notificar.mensajeCargando('Habilitando usuario...')
+          let datos = {
+            accion: 'habilitar',
+            correo: correo,
+            token:  await this.almacenar.obtener('token')
+          }
+          await this.servidor.enviar(datos, 'usuarios').subscribe(
+            (respuesta:any) => {
+              if (respuesta.sesion !== undefined) {
+                this.notificar.notificarComplejo('Sesión', respuesta.mensaje, 'close-circle-outline', 'danger')
+                this.irA.pagina('home')
+                this.mensajeCargando.dismiss()
+                return
+              }
+              if (respuesta.estado) {
+                this.mensajeCargando.dismiss()
+                this.notificar.notificarComplejo('Habilitar Usuario', respuesta.mensaje, 'checkmark-circle-outline', 'success')
+                this.almacenar.guardar('token', respuesta.token)
+                this.cargarUsuarios()
+              } else {
+                this.almacenar.guardar('token', respuesta.token)
+                this.notificar.notificarComplejo('Habilitar Usuario', respuesta.mensaje, 'close-circle-outline', 'danger')
+                this.mensajeCargando.dismiss()
+              }
+            }
+          )
+        }
       },
       {
         text: 'Cancelar',
@@ -124,12 +182,31 @@ export class UsersListPage implements OnInit {
     await this.accion.mensajeAccion('Habilitar Usuario', '¿Desea habilitar este usuario?', botones)
   }
 
-  async buscar (evento:any) {
+  async buscar (buscar:any) {
+    this.mensajeCargando = await this.notificar.mensajeCargando('Buscando usuarios...')
     let datos = {
       accion: 'buscar',
-      buscar: evento.target.value,
+      buscar: buscar.target.value,
+      estado: this.estado,
       token:  await this.almacenar.obtener('token')
     }
+    await this.servidor.enviar(datos, 'usuarios').subscribe(
+      async (respuesta:any) => {
+        if (respuesta.sesion !== undefined) {
+          this.notificar.notificarComplejo('Sesión', respuesta.mensaje, 'close-circle-outline', 'danger')
+          this.irA.pagina('home')
+          return
+        }
+        this.listaUsuarios = respuesta.datos
+        this.almacenar.guardar('token', respuesta.token)
+        this.mensajeCargando.dismiss()
+        const input = await document.getElementById('busqueda')
+        if (input) {
+          input.click()
+        }
+        return
+      }
+    )
   }
 
   obtenerAccion () {
