@@ -12,7 +12,7 @@
 <ion-content [fullscreen]="true">
   <form [formGroup]="formulario" novalidate *ngIf="formulario">
     <ion-item class="ion-margin">
-      <ion-select formControlName="asignacion" placeHolder="Seleccionar una asignación" interface="popover">
+      <ion-select formControlName="asignacion" placeHolder="Usuarios asignados" interface="popover">
         <div slot="label">Asignaciones</div>
         <ion-select-option *ngFor="let asignaciones of listaAsignaciones" [value]="asignaciones.id">{{asignaciones.nombres.split(' ')[0]}} {{asignaciones.apellidos.split(' ')[0]}}</ion-select-option>
       </ion-select>
@@ -22,14 +22,14 @@
         <div slot="label">Descripción</div>
       </ion-textarea>
     </ion-item>
-    <ion-item class="ion-margin-horizontal ion-padding-vertical">
-      <ion-datetime display-format="DD.MM.YYYY HH:mm" formControlName="inicio" class="ion-margin">
+    <ion-item class="ion-margin">
+      <ion-datetime class="ion-margin-vertical" display-format="DD.MM.YYYY HH:mm" formControlName="inicio">
         <span slot="title">Fecha de Inicio</span>
         <span slot="time-label">Tiempo</span>
       </ion-datetime>
     </ion-item>
-    <ion-item class="ion-margin-horizontal ion-padding-vertical">
-      <ion-datetime display-format="DD.MM.YYYY HH:mm" formControlName="fin" class="ion-margin">
+    <ion-item class="ion-margin">
+      <ion-datetime class="ion-margin-vertical" display-format="DD.MM.YYYY HH:mm" formControlName="fin">
       <span slot="title">Fecha de Finalización</span>
       <span slot="time-label">Tiempo</span>
     </ion-datetime>
