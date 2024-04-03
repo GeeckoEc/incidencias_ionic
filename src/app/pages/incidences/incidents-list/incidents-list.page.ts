@@ -112,7 +112,7 @@ export class IncidentsListPage implements OnInit {
   }
 
   async nuevaIncidencia () {
-    await this.almacenar.eliminar('idRegistro')
+    await this.almacenar.eliminar('idIncidencia')
     await this.irA.pagina('incidents-form')
   }
 
@@ -133,7 +133,7 @@ export class IncidentsListPage implements OnInit {
   }
 
   async verIncidencia (id: number) {
-    await this.almacenar.guardar('idRegistro', id).then(
+    await this.almacenar.guardar('idIncidencia', id).then(
       () => {
         this.irA.pagina('incidents-info')
       }
@@ -141,7 +141,7 @@ export class IncidentsListPage implements OnInit {
   }
 
   async editarIncidencia (id: number) {
-    await this.almacenar.guardar('idRegistro', id).then(
+    await this.almacenar.guardar('idIncidencia', id).then(
       (dato: any) => {
         this.irA.pagina('incidents-form')
       }

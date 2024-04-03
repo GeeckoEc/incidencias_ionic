@@ -14,10 +14,11 @@ import { StorageService } from 'src/app/services/storage.service';
 })
 export class ActivitiesFormPage implements OnInit {
 
-  mensajeCargando: HTMLIonLoadingElement
-  formulario: FormGroup
-  titulo: string = 'Nueva'
-  listaEstatus: any
+  mensajeCargando:    HTMLIonLoadingElement
+  formulario:         FormGroup
+  titulo:             string  = 'Nueva'
+  listaEstatus:       any
+  listaAsignaciones:  any
 
 
   constructor(
@@ -32,6 +33,7 @@ export class ActivitiesFormPage implements OnInit {
 
   async ngOnInit() {
     this.mensajeCargando = await this.notificar.mensajeCargando('Cargando...')
+    await this.cargarAsignaciones()
     await this.cargarEstatus()
     await this.crearFormulario()
     await this.establecerPagina()
@@ -40,6 +42,7 @@ export class ActivitiesFormPage implements OnInit {
 
   crearFormulario () {
     this.formulario = this.construirFormulario.group({
+      asignacion:   ['', [Validators.required]],
       inicio:       ['', [Validators.required]],
       fin:          ['', [Validators.required]],
       descripcion:  ['', [Validators.required, Validators.minLength(10), Validators.maxLength(300)]],
@@ -48,7 +51,14 @@ export class ActivitiesFormPage implements OnInit {
   }
 
   async establecerPagina () {
-    if (await this.almacenar.obtener('idActividad') !== undefined) {
+    let ahora = new Date()
+    this.formulario.patchValue(
+      {
+        inicio:       this.convertir.fechaParaDatePicker(ahora),
+        fin:          this.convertir.fechaParaDatePicker(ahora),
+      }
+    )
+    if (await this.almacenar.obtener('idActividad') !== null) {
       this.titulo = 'Editar'
       let datos = {
         accion: 'cargar',
@@ -82,7 +92,27 @@ export class ActivitiesFormPage implements OnInit {
     )
   }
 
-  async Guardar () {
+  async cargarAsignaciones() {
+    let datos = {
+      accion:     'listaIncidencia',
+      estado:     1,
+      incidencia: await this.almacenar.obtener('idIncidencia'),
+      token:      await this.almacenar.obtener('token')
+    }
+    await this.servidor.enviar(datos, 'asignaciones').subscribe(
+      (respuesta: any) => {
+        if (respuesta.sesion !== undefined) {
+          this.notificar.notificarComplejo('Sesión', respuesta.sesion, 'close-circle-outline', 'danger')
+          this.irA.pagina('home')
+          return
+        }
+        this.listaAsignaciones  = respuesta.datos
+        this.almacenar.guardar('token', respuesta.token)
+      }
+    )
+  }
+
+  async guardar () {
     let datos = {
       accion:       'nuevo',
       token:        await this.almacenar.obtener('token'),
@@ -90,15 +120,17 @@ export class ActivitiesFormPage implements OnInit {
       inicio:       this.convertir.fechaParaSQL(this.formulario.value.inicio),
       fin:          this.convertir.fechaParaSQL(this.formulario.value.fin),
       estatus:      this.formulario.value.estatus,
-      asignacion:   await this.almacenar.obtener('idAsignacion')
+      asignacion:   this.formulario.value.asignacion
     }
     await this.servidor.enviar(datos, 'actividades').subscribe(
       (respuesta: any) => {
-        if (respuesta.estad) {
+        if (respuesta.estado) {
           this.notificar.notificarComplejo('Actividad', respuesta.mensaje, 'checkmark-circle-outline', 'success')
+          this.almacenar.guardar('token', respuesta.token)
           this.irA.atras()
         } else {
           this.notificar.notificarComplejo('Actividad', respuesta.mensaje, 'close-circle-outline', 'danger')
+          this.almacenar.guardar('token', respuesta.token)
         }
       }
     )

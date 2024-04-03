@@ -14,6 +14,9 @@ import { StorageService } from 'src/app/services/storage.service';
 export class IncidentsInfoPage implements OnInit {
 
   informacion:      any
+  listaEstatus:     any
+  nuevoEstatus:     number  = 0
+  ocultarEstatus:   boolean = false
   titulo:           string  = 'Detalles de la Incidencia'
   fechaIncidencia:  string  = ''
   estadoIncidencia: string  = ''
@@ -28,7 +31,7 @@ export class IncidentsInfoPage implements OnInit {
   ]
 
   listaActividades: any = [
-    {actividad: 'No hay actividades registradas.'},
+    {descripcion: 'No hay actividades registradas.'},
   ]
 
   constructor(
@@ -43,6 +46,8 @@ export class IncidentsInfoPage implements OnInit {
   async ngOnInit() {
     this.mensajeCargando  = await this.notificar.mensajeCargando('Cargando...')
     await this.verificarServidor()
+    await this.cargarEstatus()
+    await this.cargarActividades()
   }
 
   async verificarServidor () {
@@ -77,7 +82,7 @@ export class IncidentsInfoPage implements OnInit {
   async cargarIncidencia () {
     let datos = {
       accion: 'informacion',
-      id:     await this.almacenar.obtener('idRegistro'),
+      id:     await this.almacenar.obtener('idIncidencia'),
       token:  await this.almacenar.obtener('token')
     }
     await this.servidor.enviar(datos, 'incidencias').subscribe(
@@ -90,6 +95,7 @@ export class IncidentsInfoPage implements OnInit {
         this.fechaIncidencia  = this.convertir.fechaLarga(respuesta.datos.fecha)
         this.estadoIncidencia = this.listaEstados[respuesta.datos.estado]
         this.almacenar.guardar('token', respuesta.token)
+        this.nuevoEstatus = this.informacion.estatus_id
           this.cargarAsignados()
       }
     )
@@ -113,6 +119,84 @@ export class IncidentsInfoPage implements OnInit {
         }
        }
      )
+  }
+
+  async cargarEstatus () {
+    let datos = {
+      accion: 'listaCompleta',
+      token:  await this.almacenar.obtener('token')
+    }
+    await this.servidor.enviar(datos, 'estatus').subscribe(
+      (respuesta: any) => {
+        if (respuesta.sesion !== undefined) {
+          this.notificar.notificarComplejo('Sesión', respuesta.mensaje, 'close-circle-outline', 'danger')
+          this.irA.pagina('home')
+        }
+        this.listaEstatus = respuesta.datos
+        this.almacenar.guardar('token', respuesta.token)
+      }
+    )
+  }
+
+  async cargarActividades () {
+    let datos = {
+      accion: 'listaIncidencia',
+      incidencia: await this.almacenar.obtener('idIncidencia'),
+      token: await this.almacenar.obtener('token'),
+      estado: 1,
+    }
+    await this.servidor.enviar(datos, 'actividades').subscribe(
+      (respuesta: any) => {
+        if (respuesta.sesion !== undefined) {
+          this.notificar.notificarComplejo('Sesión', respuesta.mensaje, 'close-circle-outline', 'danger')
+          this.irA.pagina('home')
+          return
+        }
+        this.listaActividades = respuesta.datos
+        this.almacenar.guardar('token', respuesta.token)
+      }
+    )
+  }
+
+  cambiarEstatus () {
+    this.ocultarEstatus = true
+  }
+
+  cancelarCambio () {
+    this.ocultarEstatus = false
+  }
+
+  async cambiarNuevoEstatus () {
+    let botones = [
+      {
+        text: 'Sí',
+        handler: async () => {
+          let datos = {
+            accion: 'cambiarEstatus',
+            id:     await this.almacenar.obtener('idIncidencia'),
+            estatus: this.nuevoEstatus,
+            token:  await this.almacenar.obtener('token')
+          }
+          await this.servidor.enviar(datos, 'incidencias').subscribe(
+            (respuesta: any) => {
+              if (respuesta.sesion !== undefined) {
+                this.notificar.notificarComplejo('Sesión', respuesta.mensaje, 'close-circle-outline', 'danger')
+                this.irA.pagina('home')
+              }
+              this.notificar.notificarComplejo('Estado', respuesta.mensaje, 'checkmark-circle-outline', 'success')
+              this.cargarIncidencia()
+              this.ocultarEstatus = false
+              this.almacenar.guardar('token', respuesta.token)
+            }
+          )
+        }
+      },
+      {
+        text: 'No',
+        role: 'cancel',
+      }
+    ]
+    await this.accion.mensajeAccion('Cambiar Estatus', '¿Desea cambiar el estatus de la incidencia?', botones)
   }
 
   asignar () {

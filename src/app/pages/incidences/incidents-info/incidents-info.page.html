@@ -33,6 +33,41 @@
       <ion-text>
         <p>{{estadoIncidencia}}</p>
       </ion-text>
+      <ion-note>Estatus</ion-note>
+      <ion-grid class="ion-no-padding" fixed [ngStyle]="{'display' : !ocultarEstatus ? 'block': 'none'}">
+        <ion-row>
+          <ion-col size="6">
+            <ion-text>
+              <p>
+                {{informacion.estatus}}
+              </p>
+            </ion-text>
+          </ion-col>
+          <ion-col size="6" class="ion-align-items-center">
+            <ion-button expand="block" (click)="cambiarEstatus()">
+              Cambiar Estatus
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <ion-select [(ngModel)]="nuevoEstatus"  [ngStyle]="{'display' : ocultarEstatus ? 'block': 'none'}" interface="popover">
+        <div slot="label">Selccionar estatus</div>
+        <ion-select-option *ngFor="let estatus of listaEstatus" [value]="estatus.id">{{estatus.estatus}}</ion-select-option>
+      </ion-select>
+      <ion-grid fixed class="ion-no-padding" [ngStyle]="{'display' : ocultarEstatus ? 'block': 'none'}">
+        <ion-row>
+          <ion-col size="6">
+            <ion-button (click)="cambiarNuevoEstatus()" expand="block" [disabled]="informacion.estatus_id == nuevoEstatus">
+              Cambiar
+            </ion-button>
+          </ion-col>
+          <ion-col size="6">
+            <ion-button (click)="cancelarCambio()" expand="block"color="medium">
+              Cancelar
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
       <ion-note>Prioridad de la Incidencia</ion-note>
       <ion-text>
         <p>{{informacion.prioridad}}</p>
@@ -63,8 +98,10 @@
         </ion-button>
       </ion-list-header>
       <ion-item *ngFor="let asignados of listaAsignados">
-        <ion-label>{{asignados.nombres}} {{asignados.apellidos}}</ion-label><br>
-        <ion-note *ngIf="asignados.rol">{{asignados.rol}}</ion-note>
+        <ion-label>{{asignados.nombres}} {{asignados.apellidos}}</ion-label>
+        <ion-chip color="primary" mode="ios" outline="true">
+          <ion-label>{{asignados.rol}}</ion-label>
+        </ion-chip>
       </ion-item>
     </ion-list>
     <ion-list class="ion-margin">
@@ -75,8 +112,8 @@
           <ion-icon class="ion-margin-horizontal" name="add"></ion-icon>
         </ion-button>
       </ion-list-header>
-      <ion-item *ngFor="let actividad of listaActividades">
-        <ion-label>{{actividad.actividad}}</ion-label>
+      <ion-item *ngFor="let actividades of listaActividades">
+        <ion-label>{{actividades.descripcion.slice(0, 45)}}...</ion-label>
       </ion-item>
     </ion-list>
   </div>

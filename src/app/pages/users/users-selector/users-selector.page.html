@@ -11,7 +11,7 @@
 
 <ion-content [fullscreen]="true">
   <ion-item >
-    <ion-searchbar placeholder="Buscar usuario" inputmode="text" animate="true" type="decimal"  [debounce]="500" (ionInput)="buscar()"></ion-searchbar>
+    <ion-searchbar placeholder="Buscar usuario" inputmode="text" animate="true" type="text"  [debounce]="800" (ionInput)="buscar($event)"></ion-searchbar>
   </ion-item>
   <ion-list style="height: 70%; overflow-y: auto;">
     <ion-list-header>

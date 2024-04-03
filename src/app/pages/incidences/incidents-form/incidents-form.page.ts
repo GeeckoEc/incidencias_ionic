@@ -39,7 +39,7 @@ export class IncidentsFormPage implements OnInit {
   }
 
   async establerFormulario () {
-    let idTemporal  = await this.almacenar.obtener('idRegistro')
+    let idTemporal  = await this.almacenar.obtener('idIncidencia')
     if (idTemporal == null) {
       this.id = 0
       return

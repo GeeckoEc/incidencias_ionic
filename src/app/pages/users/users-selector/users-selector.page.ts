@@ -80,10 +80,12 @@ export class UsersSelectorPage implements OnInit {
     }
   }
 
-  async buscar () {
+  async buscar (event: any) {
     let datos = {
       accion:   'buscar',
-      buscar:   this.busqueda
+      buscar:   event.target.value,
+      token:    await this.almacenar.obtener('token'),
+      estado:   1
     }
     await this.servidor.enviar(datos, 'usuarios').subscribe(
       (respuesta: any) => {
@@ -119,7 +121,7 @@ export class UsersSelectorPage implements OnInit {
       accion:           'nuevo',
       usuario:          this.formulario.value.usuario,
       observaciones:    this.formulario.value.observaciones,
-      incidencia:       await this.almacenar.obtener('idRegistro'),
+      incidencia:       await this.almacenar.obtener('idIncidencia'),
       token:            await this.almacenar.obtener('token'),
       estatus:          1
     }

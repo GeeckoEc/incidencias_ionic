@@ -12,29 +12,35 @@
 <ion-content [fullscreen]="true">
   <form [formGroup]="formulario" novalidate *ngIf="formulario">
     <ion-item class="ion-margin">
+      <ion-select formControlName="asignacion" placeHolder="Seleccionar una asignación" interface="popover">
+        <div slot="label">Asignaciones</div>
+        <ion-select-option *ngFor="let asignaciones of listaAsignaciones" [value]="asignaciones.id">{{asignaciones.nombres.split(' ')[0]}} {{asignaciones.apellidos.split(' ')[0]}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item class="ion-margin">
       <ion-textarea labelPlacement="floating" formControlName="descripcion" [autoGrow]="true">
         <div slot="label">Descripción</div>
       </ion-textarea>
     </ion-item>
-    <!-- <ion-item class="ion-margin-horizontal ion-padding-vertical"> -->
+    <ion-item class="ion-margin-horizontal ion-padding-vertical">
       <ion-datetime display-format="DD.MM.YYYY HH:mm" formControlName="inicio" class="ion-margin">
         <span slot="title">Fecha de Inicio</span>
         <span slot="time-label">Tiempo</span>
       </ion-datetime>
-    <!-- </ion-item> -->
-    <!-- <ion-item class="ion-margin-horizontal ion-padding-vertical"> -->
+    </ion-item>
+    <ion-item class="ion-margin-horizontal ion-padding-vertical">
       <ion-datetime display-format="DD.MM.YYYY HH:mm" formControlName="fin" class="ion-margin">
       <span slot="title">Fecha de Finalización</span>
       <span slot="time-label">Tiempo</span>
     </ion-datetime>
-    <!-- </ion-item> -->
+    </ion-item>
     <ion-item class="ion-margin">
       <ion-select value="1" interface="popover" formControlName="estatus">
         <div slot="label">Estatus de la Acción</div>
         <ion-select-option *ngFor="let estatus of listaEstatus" value="{{estatus.id}}">{{estatus.estatus}}</ion-select-option>
       </ion-select>
     </ion-item>
-    <ion-button class="ion-margin" expand="block" [disabled]="!formulario.valid">
+    <ion-button (click)="guardar()" class="ion-margin" expand="block" [disabled]="!formulario.valid">
       Guardar
     </ion-button>
   </form>
