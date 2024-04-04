@@ -110,9 +110,10 @@ export class IncidentsInfoPage implements OnInit {
      await this.servidor.enviar(datos, 'asignaciones').subscribe(
        (respuesta: any) => {
         if (respuesta.sesion !== undefined) {
-          this.mensajeCargando.dismiss()
           this.notificar.notificarComplejo('Sesión', respuesta.mensaje, 'close-circle-outline', 'danger')
           this.irA.pagina('home')
+          this.mensajeCargando.dismiss()
+          return
         }
         if (respuesta.datos !== null) {
           this.listaAsignados = respuesta.datos
@@ -150,6 +151,7 @@ export class IncidentsInfoPage implements OnInit {
         if (respuesta.sesion !== undefined) {
           this.notificar.notificarComplejo('Sesión', respuesta.mensaje, 'close-circle-outline', 'danger')
           this.irA.pagina('home')
+          this.mensajeCargando.dismiss()
           return
         }
         this.listaActividades = respuesta.datos

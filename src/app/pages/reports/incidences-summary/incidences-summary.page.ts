@@ -13,8 +13,13 @@ import { StorageService } from 'src/app/services/storage.service';
 })
 export class IncidencesSummaryPage implements OnInit {
 
-  incidencia:     any
-  mensajeCargando: HTMLIonLoadingElement
+  incidencia:       any
+  listaAsignados:   any
+  listaActividades: any
+  mensajeCargando:  HTMLIonLoadingElement
+  listaEstados:     any = [
+    'Deshabilitada', 'Activa', 'Terminada'
+  ]
 
   constructor(
     private irA: NavigationService,
@@ -22,11 +27,13 @@ export class IncidencesSummaryPage implements OnInit {
     private accion: ActionService,
     private servidor: ServerService,
     private notificar: NotifyService,
-    private convertir: ConverterService
+    public convertir: ConverterService
   ) { }
 
-  ngOnInit() {
-    this.cargarIncidencia()
+  async ngOnInit() {
+    await this.cargarIncidencia()
+    await this.cargarAsignados()
+    await this.cargarActividades()
   }
 
   async cargarIncidencia () {
@@ -34,7 +41,7 @@ export class IncidencesSummaryPage implements OnInit {
     let datos = {
       accion:     'informacion',
       token:      await this.almacenar.obtener('token'),
-      incidencia: await this.almacenar.obtener('idIncidencia')
+      id: await this.almacenar.obtener('idIncidencia')
     }
     await this.servidor.enviar(datos, 'incidencias').subscribe(
       (respuesta: any) => {
@@ -50,6 +57,52 @@ export class IncidencesSummaryPage implements OnInit {
       }
     )
   }
+
+  async cargarAsignados () {
+    this.mensajeCargando  = await this.notificar.mensajeCargando('Cargando asignados...')
+    let datos = {
+      accion: 'listaEstado',
+      estado: 1,
+      token:  await this.almacenar.obtener('token')
+    }
+    await this.servidor.enviar(datos, 'asignaciones').subscribe(
+      (respuesta: any) => {
+       if (respuesta.sesion !== undefined) {
+         this.notificar.notificarComplejo('Sesión', respuesta.mensaje, 'close-circle-outline', 'danger')
+         this.irA.pagina('home')
+         this.mensajeCargando.dismiss()
+         return
+       }
+       if (respuesta.datos !== null) {
+         this.listaAsignados = respuesta.datos
+       }
+       this.mensajeCargando.dismiss()
+      }
+    )
+ }
+
+ async cargarActividades () {
+  this.mensajeCargando  = await this.notificar.mensajeCargando('Cargando actividades...')
+  let datos = {
+    accion: 'listaIncidencia',
+    incidencia: await this.almacenar.obtener('idIncidencia'),
+    token: await this.almacenar.obtener('token'),
+    estado: 1,
+  }
+  await this.servidor.enviar(datos, 'actividades').subscribe(
+    (respuesta: any) => {
+      if (respuesta.sesion !== undefined) {
+        this.notificar.notificarComplejo('Sesión', respuesta.mensaje, 'close-circle-outline', 'danger')
+        this.irA.pagina('home')
+        this.mensajeCargando.dismiss()
+        return
+      }
+      this.listaActividades = respuesta.datos
+      this.almacenar.guardar('token', respuesta.token)
+      this.mensajeCargando.dismiss()
+    }
+  )
+}
 
   salir () {
     this.irA.atras()

@@ -21,55 +21,96 @@
       <p>{{incidencia.informe}}</p>
     </ion-text>
   </ion-list>
-  <ion-list>
-    <ion-list-header class="ion-margin">
+  <ion-list class="ion-margin ion-padding-horizontal">
+    <ion-list-header>
       <ion-label>RESUMEN</ion-label>
     </ion-list-header>
     <ion-note>Descripción</ion-note>
     <ion-text>
-      <p>incidencia.descripcion</p>
+      <p>{{incidencia.descripcion}}</p>
     </ion-text>
-    <ion-note>Impactor</ion-note>
+    <ion-note>Impacto</ion-note>
     <ion-text>
-      <p>incidencia.impacto</p>
+      <p>{{incidencia.impacto}}</p>
     </ion-text>
     <ion-note>Riesgos</ion-note>
     <ion-text>
-      <p>incidencia.riesgos</p>
+      <p>{{incidencia.riesgos}}</p>
     </ion-text>
   </ion-list>
-  <ion-list>
-    <ion-list-header class="ion-margin">
-      <ion-label>ASIGNACIONES Y ACTIVIDADES</ion-label>
+  <ion-list class="ion-margin ion-padding-horizontal"  *ngIf="listaAsignados">
+    <ion-list-header>
+      <ion-label>ASIGNACIONES</ion-label>
     </ion-list-header>
-    <ion-note>Descripción</ion-note>
-    <ion-text>
-      <p>incidencia.descripcion</p>
-    </ion-text>
-    <ion-note>Impactor</ion-note>
-    <ion-text>
-      <p>incidencia.impacto</p>
-    </ion-text>
-    <ion-note>Riesgos</ion-note>
-    <ion-text>
-      <p>incidencia.riesgos</p>
-    </ion-text>
+    <ion-list *ngFor="let asignaciones of listaAsignados" color="secondary" style="border: 1px #383838 solid; border-radius: 5px;" class="ion-padding ion-margin-vertical">
+      <ion-note>Usuario</ion-note>
+      <ion-text>
+        <p>{{asignaciones.nombres}} {{asignaciones.apellidos}}</p>
+      </ion-text>
+      <ion-note>Rol</ion-note>
+      <ion-text>
+        <p>{{asignaciones.rol}}</p>
+      </ion-text>
+      <ion-note>Observación</ion-note>
+      <ion-text>
+        <p>{{asignaciones.observaciones}}</p>
+      </ion-text>
+    </ion-list>
   </ion-list>
-  <ion-list>
-    <ion-list-header class="ion-margin">
+  <ion-list class="ion-margin ion-padding-horizontal"  *ngIf="listaActividades">
+    <ion-list-header>
+      <ion-label>Actividades</ion-label>
+    </ion-list-header>
+    <ion-list *ngFor="let actividades of listaActividades" style="border: 1px #383838 solid; border-radius: 5px;" class="ion-padding ion-margin-vertical">
+      <ion-note>Descripcion</ion-note>
+      <ion-text>
+        <p>{{actividades.descripcion}}</p>
+      </ion-text>
+      <ion-note>Inicio de la actividad</ion-note>
+      <ion-text>
+        <p>{{convertir.fechaLarga(actividades.fecha_inicio)}}</p>
+      </ion-text>
+      <ion-note>Fin de la actividad</ion-note>
+      <ion-text>
+        <p>{{convertir.fechaLarga(actividades.fecha_fin)}}</p>
+      </ion-text>
+    </ion-list>
+  </ion-list>
+  <ion-list class="ion-margin ion-padding-horizontal">
+    <ion-list-header>
       <ion-label>DATOS DE INCIDENCIA</ion-label>
     </ion-list-header>
-    <ion-note>Descripción</ion-note>
+    <ion-note>Creado por</ion-note>
     <ion-text>
-      <p>incidencia.descripcion</p>
+      <p>incidencia.usuario</p>
     </ion-text>
-    <ion-note>Impactor</ion-note>
+    <ion-note>Rol del creador</ion-note>
     <ion-text>
-      <p>incidencia.impacto</p>
+      <p>{{incidencia.rol}}</p>
     </ion-text>
-    <ion-note>Riesgos</ion-note>
+    <ion-note>Correo del creador</ion-note>
     <ion-text>
-      <p>incidencia.riesgos</p>
+      <p>{{incidencia.correo}}</p>
+    </ion-text>
+    <ion-note>Prioridad</ion-note>
+    <ion-text>
+      <p>incidencia.prioridad</p>
+    </ion-text>
+    <ion-note>Fecha de la incidencia</ion-note>
+    <ion-text>
+      <p>converit.fechaLarga(incidencia.fecha)</p>
+    </ion-text>
+    <ion-note>Fecha de registro en el sistema</ion-note>
+    <ion-text>
+      <p>{{incidencia.fecha_creacion}}</p>
+    </ion-text>
+    <ion-note>Estado</ion-note>
+    <ion-text>
+      <p>{{listaEstados[incidencia.estado]}}</p>
+    </ion-text>
+    <ion-note>Estatus</ion-note>
+    <ion-text>
+      <p>{{incidencia.estatus}}</p>
     </ion-text>
   </ion-list>
 </ion-content>
