@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { MainStartPageRoutingModule } from './main-start-routing.module';
 
 import { MainStartPage } from './main-start.page';
+import { NgApexchartsModule } from 'ng-apexcharts';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    MainStartPageRoutingModule
+    MainStartPageRoutingModule, 
+    NgApexchartsModule
   ],
   declarations: [MainStartPage]
 })

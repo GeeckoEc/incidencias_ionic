@@ -54,6 +54,14 @@ const routes: Routes = [
     path: 'users-info',
     loadChildren: () => import('./pages/users/users-info/users-info.module').then( m => m.UsersInfoPageModule)
   },
+  {
+    path: 'incidences-summary',
+    loadChildren: () => import('./pages/reports/incidences-summary/incidences-summary.module').then( m => m.IncidencesSummaryPageModule)
+  },
+  {
+    path: 'reports',
+    loadChildren: () => import('./pages/reports/reports/reports.module').then( m => m.ReportsPageModule)
+  },
 
 
 ];
