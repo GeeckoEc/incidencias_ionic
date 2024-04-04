@@ -1,7 +1,33 @@
-Agregar 
+Agregar la siguiente línea luego de Strict en tsconfig.json.
     "strictPropertyInitialization": false,
-Luego se Strict en tsconfig.json.
+
 Dentro de la carpeta src/app/ existe un archivo llamado app.module.ts, importar HttpClienteModule y agregarlo en el inports[].
+
 Crea una  carpeta www en la raiz del proyecto y pon un index.html dentro.
-npm i @capacitor/preferences
-npx cap sync
+    npm i @capacitor/preferences
+    npx cap sync
+
+Agragr apex charts
+    npm install apexcharts ng-apexcharts --save
+
+Agregar al angular.json  dentro de "projects/architect/build/options/scripts
+    "scripts": [
+    "node_modules/apexcharts/dist/apexcharts.min.js"
+    ]
+
+* Si aprece algún warning leugo re reiniciar VS Code y la app de puede agregar lo siguiente inmediatamente despues de "tsConfig": "tsconfig.app.json":
+    "allowedCommonJsDependencies": [
+        "apexcharts"
+    ],
+
+Agregamos en los imports: [] de src/app/app.module.ts
+    NgApexchartsModule
+
+Crear un módulo ng-apexcharts-module para importar:
+    imports: [
+    BrowserModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgApexchartsModule,
+    ...
+    ]

@@ -1,0 +1,41 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="salir()" color="primary">
+        <ion-icon slot="start" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>incidences-summary</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" *ngIf="incidencia">
+  <ion-item class="ion-margin">
+    <h3>{{incidencia.asunto}}</h3>
+  </ion-item>
+  <ion-list>
+    <ion-list-header>
+      <ion-label>INFORME</ion-label>
+    </ion-list-header>
+    <ion-text>
+      <p>{{incidencia.informe}}</p>
+    </ion-text>
+  </ion-list>
+  <ion-list>
+    <ion-list-header>
+      <ion-label>RESUMEN</ion-label>
+    </ion-list-header>
+    <ion-note>Descripción</ion-note>
+    <ion-text>
+      <p>incidencia.descripcion</p>
+    </ion-text>
+    <ion-note>Impactor</ion-note>
+    <ion-text>
+      <p>incidencia.impacto</p>
+    </ion-text>
+    <ion-note>Riesgos</ion-note>
+    <ion-text>
+      <p>incidencia.riesgos</p>
+    </ion-text>
+  </ion-list>
+</ion-content>
