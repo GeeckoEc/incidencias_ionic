@@ -13,6 +13,12 @@
   <ion-button (click)="cargarIncidencias()" expand="block" class="ion-margin">
     Reportes de Incidencias
   </ion-button>
+  <ion-button expand="block" class="ion-margin">
+    Reporte de Incidencias del Mes
+  </ion-button>
+  <ion-button expand="block" class="ion-margin">
+    Reporte Actividades
+  </ion-button>
 </ion-content>
 
 <ion-content [fullscreen]="true" [ngStyle]="{'display' : !ocultarLista ? 'block': 'none'}" *ngIf="listaIncidencias">
