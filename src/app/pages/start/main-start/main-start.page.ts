@@ -138,7 +138,7 @@ export class MainStartPage implements OnInit {
   }
 
   irReportes () {
-    this.irA.pagina('reports-list')
+    this.irA.pagina('reports')
   }
 
   irUsuarios () {
