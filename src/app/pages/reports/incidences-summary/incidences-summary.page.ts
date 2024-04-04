@@ -26,6 +26,7 @@ export class IncidencesSummaryPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.cargarIncidencia()
   }
 
   async cargarIncidencia () {
@@ -33,7 +34,7 @@ export class IncidencesSummaryPage implements OnInit {
     let datos = {
       accion: 'informacion',
       token:  await this.almacenar.obtener('token'),
-      incidencia: await this.almacenar.obtener('idIncidencia')
+      incidencia: 2/* await this.almacenar.obtener('idIncidencia') */
     }
     await this.servidor.enviar(datos, 'incidencias').subscribe(
       (respuesta: any) => {
