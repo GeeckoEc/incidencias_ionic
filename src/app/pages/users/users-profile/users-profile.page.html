@@ -1,0 +1,19 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="salir()" color="primary">
+        <ion-icon slot="start" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Perfil de Usuario</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" *ngIf="informacion">
+  <ion-item class="ion-margin">
+    <ion-text>
+      <h3>Hola {{informacion.nombres.split(' ')[0]}}</h3>
+    </ion-text>
+    <ion-note>A continuación tu información completa.</ion-note> 
+  </ion-item>
+</ion-content>
