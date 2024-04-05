@@ -42,10 +42,10 @@ export class SignInPage implements OnInit {
       contrasena: this.sesionForm.value.contrasena
     }
     await this.servidor.enviar(datos, 'autenticar').subscribe(
-      (datos: any) => {
+      async (datos: any) => {
         if (datos.estado == true) {
           this.notificar.notificarComplejo('Inicio de sesión: ',datos.mensaje, 'checkmark-circle-outline', 'success')
-          this.almacenarSesion(datos) 
+          await this.almacenarSesion(datos) 
           this.irA.pagina('main-start')
         } else {
           this.notificar.notificarComplejo('Inicio de sesión: ',datos.mensaje, 'close-circle-outline', 'danger')
@@ -60,6 +60,7 @@ export class SignInPage implements OnInit {
     await this.almacenar.guardar('apellidos', datos.apellidos)
     await this.almacenar.guardar('rol', datos.rol)
     await this.almacenar.guardar('correo', this.sesionForm.value.correo)
+    await this.almacenar.guardar('rolId', datos.rol_id)
   }
 
   recuperarContrasena () {

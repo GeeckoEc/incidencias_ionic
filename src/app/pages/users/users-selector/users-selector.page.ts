@@ -52,7 +52,8 @@ export class UsersSelectorPage implements OnInit {
   async establecerPagina (){
     this.mensajeCargando  = await this.notificar.mensajeCargando('Verificando conexión...*')
     let datos = {
-      accion:   'usuariosHabilitados',
+      accion:   'usuariosParaAsignacion',
+      incidencia: await this.almacenar.obtener('idIncidencia'),
       token:    await this.almacenar.obtener('token')
     }
     await this.servidor.enviar(datos, 'usuarios').subscribe(

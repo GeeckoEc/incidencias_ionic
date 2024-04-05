@@ -103,9 +103,10 @@ export class IncidentsInfoPage implements OnInit {
 
   async cargarAsignados () {
      let datos = {
-       accion: 'listaEstado',
-       estado: 1,
-       token:  await this.almacenar.obtener('token')
+       accion:      'listaIncidencia',
+       estado:      1,
+       incidencia:  await this.almacenar.obtener('idIncidencia'),
+       token:       await this.almacenar.obtener('token')
      }
      await this.servidor.enviar(datos, 'asignaciones').subscribe(
        (respuesta: any) => {

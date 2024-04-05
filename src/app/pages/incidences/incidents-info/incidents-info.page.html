@@ -98,8 +98,8 @@
         </ion-button>
       </ion-list-header>
       <ion-item *ngFor="let asignados of listaAsignados">
-        <ion-label>{{asignados.nombres}} {{asignados.apellidos}}</ion-label>
-        <ion-chip color="primary" mode="ios" outline="true">
+        <ion-label>{{asignados.nombres.split(' ')[0]}} {{asignados.apellidos.split(' ')[0]}}</ion-label>
+        <ion-chip color="primary" mode="ios" outline="true" *ngIf="asignados.rol">
           <ion-label>{{asignados.rol}}</ion-label>
         </ion-chip>
       </ion-item>
