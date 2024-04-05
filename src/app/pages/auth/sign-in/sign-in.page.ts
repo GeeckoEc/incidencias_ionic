@@ -17,11 +17,11 @@ export class SignInPage implements OnInit {
   public deshabilitarBoton: boolean = true
 
   constructor(
-    private servidor: ServerService,
-    private notificar: NotifyService,
+    private servidor:   ServerService,
+    private notificar:  NotifyService,
     private formulario: FormBuilder,
-    private almacenar: StorageService,
-    private irA: NavigationService
+    private almacenar:  StorageService,
+    private irA:        NavigationService
   ) { }
 
   ngOnInit() {
@@ -60,8 +60,8 @@ export class SignInPage implements OnInit {
     await this.almacenar.guardar('apellidos', datos.apellidos)
     await this.almacenar.guardar('rol', datos.rol)
     await this.almacenar.guardar('correo', this.sesionForm.value.correo)
-    await this.almacenar.guardar('rolId', datos.rol_id)
-    await this.almacenar.guardar('generoId', datos.genero_id)
+    await this.almacenar.guardar('rolId', parseInt(datos.rol_id))
+    await this.almacenar.guardar('generoId', parseInt(datos.genero_id))
   }
 
   recuperarContrasena () {

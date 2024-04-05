@@ -5,7 +5,7 @@
         <ion-icon name="chevron-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title class="ion-no-padding">Incidencias</ion-title>
+    <ion-title class="ion-no-padding">{{titulo}}</ion-title>
     <ion-buttons slot="end">
       <ion-button color="primary" (click)="nuevaIncidencia()">
         <ion-icon name="add"></ion-icon>
@@ -32,7 +32,7 @@
         <ion-item-option color="primary" (click)="verIncidencia(incidencias.id)">
           <ion-icon name="list-outline"></ion-icon>
         </ion-item-option>
-        <ion-item-option color="medium" (click)="editarIncidencia(incidencias.id)" [ngStyle]="{'display' : !ocultarEditar ? 'block': 'none'}">
+        <ion-item-option color="medium" (click)="editarIncidencia(incidencias.id)" [ngStyle]="{'display' : !ocultarEditar ? 'block': 'none'}" [disabled]="incidencias.estatus_id !== '1' && rolId !== 3">
           <ion-icon name="create-outline"></ion-icon>
         </ion-item-option>
         <ion-item-option color="danger" (click)="deshabilitarIncidencia(incidencias.id)" [ngStyle]="{'display' : !ocultarDeshabilitar ? 'block': 'none'}">

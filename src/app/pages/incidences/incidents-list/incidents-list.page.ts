@@ -14,13 +14,16 @@ import { StorageService } from 'src/app/services/storage.service';
 })
 export class IncidentsListPage implements OnInit {
 
+  titulo:               string  = 'Incidencias Registradas'
   ocultarHabilitar:     boolean = true
   ocultarDeshabilitar:  boolean = false
   ocultarEditar:        boolean = false
   listaIncidencias:     any
   deshabilitarSliding:  boolean =  false
   estado:               number  = 1
-  mensajeCargando: HTMLIonLoadingElement
+  rolId:                number  = 0
+  mensajeCargando:      HTMLIonLoadingElement
+  accionLista:          string  = 'lista'
   listaEstados:         any    = [
     {
       id:  1,
@@ -46,26 +49,17 @@ export class IncidentsListPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.cargarIncidencias()
+    this.establecerPagina()
   }
 
-  async establecerPagina (siguiente: void) {
-    this.mensajeCargando = await this.notificar.mensajeCargando('Verificando conexión...')
-    this.servidor.verificarServidor().subscribe(
-      (respuesta: boolean) => {
-        if (respuesta) {
-          if (this.mensajeCargando){
-            this.mensajeCargando.dismiss();
-          }
-          siguiente
-          this.cargarIncidencias();
-        } else {
-          setTimeout(() => {
-            this.establecerPagina();
-          }, 5000);
-        }
-      }
-    );
+  async establecerPagina () {
+    this.rolId = parseInt(await this.almacenar.obtener('rolId'))
+    let cambiarLista  =  [1, 3]
+    if (!cambiarLista.includes(this.rolId)) {
+      this.titulo = 'Mis Incidencias'
+      this.accionLista = 'miLista'
+    }
+    await this.cargarIncidencias()
   }
 
   async obtenerToken () {
@@ -80,9 +74,10 @@ export class IncidentsListPage implements OnInit {
   async cargarIncidencias () {
     this.mensajeCargando  = await this.notificar.mensajeCargando('Cargando incidencias...')
     let datos = {
-      accion: 'lista',
+      accion: this.accionLista,
       estado: this.estado,
-      token:  await this.obtenerToken()
+      token:  await this.almacenar.obtener('token'),
+      correo: await this.almacenar.obtener('correo'),
     }
     await this.servidor.enviar(datos, 'incidencias').subscribe(
       (respuesta: any) => {
