@@ -34,6 +34,9 @@ export type ChartOptions = {
 export class MainStartPage implements OnInit {
 
   nombre:             string  = ''
+  apellido:           string  = ''  
+  rol:                string  = ''
+  avatar:             string  = ''
   cargandoEjecutado:  boolean = false
 
   
@@ -52,11 +55,11 @@ export class MainStartPage implements OnInit {
   }
 
   async ngOnInit() {
-    await this.cargarNombre()
+    await this.establecerPagina()
     await this.graficoIncidencias()
   }
 
-  async graficoIncidencias () {
+  async graficoIncidencias () { 
     let datos = {
       accion: 'conteoIncidenciasEstado',
       token:  await this.almacenar.obtener('token')
@@ -128,9 +131,15 @@ export class MainStartPage implements OnInit {
     
   }
 
-  async cargarNombre () {
-    this.nombre = await this.almacenar.obtener('nombres')
-    this.nombre = this.nombre.split(' ')[0]
+  async establecerPagina () {
+    this.nombre               = await this.almacenar.obtener('nombres')
+    this.nombre               = this.nombre.split(' ')[0]
+    this.apellido             = await this.almacenar.obtener('apellidos')
+    this.apellido             = this.apellido.split(' ')[0] 
+    this.rol                  = await this.almacenar.obtener('rol')
+    let png                   = ['girl', 'boy', 'other']
+    let indiceAvatar: number  = parseInt(await this.almacenar.obtener('generoId')) - 1
+    this.avatar = "../../../../assets/icon/"+ png[indiceAvatar] +".png"
   }
 
   irIncidencias () {
@@ -145,8 +154,8 @@ export class MainStartPage implements OnInit {
     this.irA.pagina('users-list')
   }
 
-  irConfiguracion () {
-    this.irA.pagina('settings')
+  irPerfil () {
+    this.irA.pagina('users-profile')
   }
 
   async cerrarSesion () {

@@ -1,19 +1,85 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button (click)="salir()" color="primary">
+      <ion-button (click)="salir()" color="primary" [disabled]="!ocultarFormulario">
         <ion-icon slot="start" name="chevron-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Perfil de Usuario</ion-title>
+    <ion-title class="ion-no-padding">Perfil de Usuario</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="editarPerfil()" color="primary" [ngStyle]="{'display' : ocultarFormulario ? 'block': 'none'}">
+        <ion-icon name="create-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="cancelar()" expand="block" [ngStyle]="{'display' : !ocultarFormulario ? 'block': 'none'}" color="primary">
+        <ion-icon slot="start" name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" *ngIf="informacion">
-  <ion-item class="ion-margin">
+  <ion-list class="ion-margin ion-padding-horizontal" [ngStyle]="{'display' : ocultarFormulario ? 'block': 'none'}">
     <ion-text>
       <h3>Hola {{informacion.nombres.split(' ')[0]}}</h3>
     </ion-text>
     <ion-note>A continuación tu información completa.</ion-note> 
-  </ion-item>
+  </ion-list>
+  <ion-list class="ion-margin ion-padding-horizontal" [ngStyle]="{'display' : ocultarFormulario ? 'block': 'none'}">
+    <ion-list-header class="ion-no-padding">
+      <ion-label>INFORMACIÓN PERSONAL</ion-label>
+    </ion-list-header>
+    <ion-note>Nombres</ion-note>
+    <ion-text><p>{{informacion.nombres}}</p></ion-text>
+    <ion-note>Apellidos</ion-note>
+    <ion-text><p>{{informacion.apellidos}}</p></ion-text>
+    <ion-note>Género</ion-note>
+    <ion-text><p>{{informacion.genero}}</p></ion-text>
+    <ion-note>Fecha de Nacimiento</ion-note>
+    <ion-text><p>{{convertir.fechaCorta(informacion.fecha_nacimiento)}}</p></ion-text>
+    <ion-note>Edad</ion-note>
+    <ion-text><p>{{informacion.edad}} años</p></ion-text>
+  </ion-list>
+  <ion-list class="ion-margin ion-padding-horizontal" [ngStyle]="{'display' : ocultarFormulario ? 'block': 'none'}">
+    <ion-list-header class="ion-no-padding">
+      <ion-label>INFORMACIÓN DE CONTACTO</ion-label>
+    </ion-list-header>
+    <ion-note>Correo</ion-note>
+    <ion-text><p>{{informacion.correo}}</p></ion-text>
+    <ion-note>Celular</ion-note>
+    <ion-text><p>{{informacion.celular}}</p></ion-text>
+  </ion-list>
+  <ion-list class="ion-margin ion-padding-horizontal" [ngStyle]="{'display' : ocultarFormulario ? 'block': 'none'}">
+    <ion-list-header class="ion-no-padding">
+      <ion-label>INFORMACIÓN DEL USUARIO</ion-label>
+    </ion-list-header>
+    <ion-note>Rol</ion-note>
+    <ion-text><p>{{informacion.rol}}</p></ion-text>
+    <ion-note>Fecha de Registro</ion-note>
+    <ion-text><p>{{convertir.fechaLarga(informacion.fecha_creacion)}}</p></ion-text>
+  </ion-list>
+
+  <form [formGroup]="formulario" [ngStyle]="{'display' : !ocultarFormulario ? 'block': 'none'}">
+    <ion-item class="ion-margin">
+      <ion-text class="ion-text-center ion-margin">
+        <ion-note>
+          NOTIFICACION<br><br>
+          Por motivos administrativos sólo te es posible realizar el cambio de tus nombres y apellidos. <br><br>
+          Para otros cambios acude al Administrador de Sistema.
+        </ion-note>
+      </ion-text>
+    </ion-item>
+    <ion-item class="ion-margin">
+      <ion-input type="text" formControlName="nombres" labelPlacement="floating">
+        <div slot="label">Nombres</div>
+      </ion-input>
+    </ion-item>
+    <ion-item class="ion-margin">
+      <ion-input type="text" formControlName="apellidos" labelPlacement="floating">
+        <div slot="label">Apellidos</div>
+      </ion-input>
+    </ion-item>
+    <ion-button (click)="guardar()" expand="block" [disabled]="!formulario.valid" class="ion-margin">
+      Guardar
+    </ion-button>
+  </form>
 </ion-content>

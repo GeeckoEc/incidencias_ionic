@@ -5,6 +5,21 @@
     </ion-toolbar>
   </ion-header>
   <ion-content class="ion-padding-vertical" >
+    <ion-list class="ion-text-center ion-margin ion-padding">
+      <img width="128px" src="{{avatar}}" alt="Imagen-Perfil">
+      <ion-text>
+        <h1>
+          {{nombre}} {{apellido}}
+        </h1>
+      </ion-text>
+      <ion-chip color="success" mode="md" outline="false" [disabled]="true">
+        <ion-label>{{rol}}</ion-label>
+      </ion-chip><br>
+      <ion-button (click)="irPerfil()">
+        <ion-icon name="person-circle-outline"></ion-icon>
+        Ver Perfil
+      </ion-button>
+    </ion-list>
     <ion-button expand="full" fill="solid" (click)="irIncidencias()">
       <ion-icon name="warning-outline"></ion-icon>
       Incidencias

@@ -115,10 +115,10 @@ export class IncidentsFormPage implements OnInit {
       },
       {
         text: 'No',
-        role: 'cancel'
+        role: 'cancel',
       }
     ]
-    await this.accion.mensajeAccion(this.titulo+' incidencia', '¿Desea cancelar la ' + this.titulo.toLowerCase() + ' incidencia? \nSe perderán los cambios.', botones)
+    await this.accion.mensajeAccion(this.titulo+' incidencia', '¿Desea cancelar ' + this.titulo.toLowerCase() + ' incidencia? \nSe perderán los cambios.', botones)
   }
 
   async guardar () {

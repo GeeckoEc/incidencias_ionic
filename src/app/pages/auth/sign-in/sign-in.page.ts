@@ -61,6 +61,7 @@ export class SignInPage implements OnInit {
     await this.almacenar.guardar('rol', datos.rol)
     await this.almacenar.guardar('correo', this.sesionForm.value.correo)
     await this.almacenar.guardar('rolId', datos.rol_id)
+    await this.almacenar.guardar('generoId', datos.genero_id)
   }
 
   recuperarContrasena () {

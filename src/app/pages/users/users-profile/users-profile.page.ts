@@ -25,7 +25,7 @@ export class UsersProfilePage implements OnInit {
     private almacenar:  StorageService,
     private notificar:  NotifyService,
     private accion:     ActionService,
-    private convertir:  ConverterService,
+    public convertir:  ConverterService,
     private construir:  FormBuilder
   ) { }
 
@@ -70,6 +70,22 @@ export class UsersProfilePage implements OnInit {
   }
 
   async editarPerfil () {
+    this.cargando = await this.notificar.mensajeCargando('Cargando perfil...')
+    this.formulario.patchValue({
+      correo:           this.informacion.correo,
+      nombres:          this.informacion.nombres,
+      apellidos:        this.informacion.apellidos,
+      genero:           this.informacion.id_genero,
+      fecha_nacimiento: this.convertir.fechaNacimientoParaDatePicker(this.informacion.fecha_nacimiento),
+      cedula:           this.informacion.cedula,
+      celular:          this.informacion.celular,
+      direccion:        this.informacion.direccion,
+    })
+    this.ocultarFormulario  = false
+    this.cargando.dismiss()
+  }
+
+  async guardar () {
     this.cargando =  await this.notificar.mensajeCargando('Editando perfil...')
     let datos = {
       accion:           'editar',
@@ -82,6 +98,7 @@ export class UsersProfilePage implements OnInit {
       cedula:           this.formulario.value.cedula,
       celular:          this.formulario.value.celular,
       direccion:        this.formulario.value.direccion,
+      rol:              await this.almacenar.obtener('rolId')
     }
     await this.servidor.enviar(datos, 'usuarios').subscribe(
       (respuesta: any) => {
@@ -96,9 +113,17 @@ export class UsersProfilePage implements OnInit {
         this.ocultarFormulario  = true
         this.cargando.dismiss()
         this.cargarInformacion()
+        this.notificar.notificarComplejo('Editar perfil', 'Perfil editado correctamente', 'checkmark-circle-outline', 'success')
         return
       }
     )
+  }
+
+  async cancelar () {
+    this.cargando =  await this.notificar.mensajeCargando('Cancelando edición...')
+    this.ocultarFormulario  = true
+    this.crearFormulario()
+    this.cargando.dismiss()
   }
 
   salir () {
