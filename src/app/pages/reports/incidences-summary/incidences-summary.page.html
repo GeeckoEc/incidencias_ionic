@@ -5,12 +5,17 @@
         <ion-icon slot="start" name="chevron-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>incidences-summary</ion-title>
+    <ion-title>Reporte de Inciencia</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="imprimir()" color="primary">
+        <ion-icon slot="start" name="print-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" *ngIf="incidencia">
-  <ion-item class="ion-margin">
+  <ion-item class="ion-margin" lines="none">
     <h3>{{incidencia.asunto}}</h3>
   </ion-item>
   <ion-list class="ion-margin">
@@ -18,11 +23,12 @@
       <ion-label>INFORME</ion-label>
     </ion-list-header>
     <ion-text>
-      <p>{{incidencia.informe}}</p>
+      <p *ngIf="incidencia.informe !== null" class="ion-margin-horizontal">{{incidencia.informe}}</p>
+      <p *ngIf="incidencia.informe == null" class="ion-margin-horizontal">Aún no hay un informe disponible.</p>
     </ion-text>
   </ion-list>
   <ion-list class="ion-margin ion-padding-horizontal">
-    <ion-list-header>
+    <ion-list-header class="ion-no-padding">
       <ion-label>RESUMEN</ion-label>
     </ion-list-header>
     <ion-note>Descripción</ion-note>
@@ -38,8 +44,8 @@
       <p>{{incidencia.riesgos}}</p>
     </ion-text>
   </ion-list>
-  <ion-list class="ion-margin ion-padding-horizontal"  *ngIf="listaAsignados">
-    <ion-list-header>
+  <ion-list class="ion-margin ion-padding-horizontal"  *ngIf="listaAsignados" >
+    <ion-list-header class="ion-no-padding">
       <ion-label>ASIGNACIONES</ion-label>
     </ion-list-header>
     <ion-list *ngFor="let asignaciones of listaAsignados" color="secondary" style="border: 1px #383838 solid; border-radius: 5px;" class="ion-padding ion-margin-vertical">
@@ -58,8 +64,8 @@
     </ion-list>
   </ion-list>
   <ion-list class="ion-margin ion-padding-horizontal"  *ngIf="listaActividades">
-    <ion-list-header>
-      <ion-label>Actividades</ion-label>
+    <ion-list-header class="ion-no-padding">
+      <ion-label>ACTIVIDADES</ion-label>
     </ion-list-header>
     <ion-list *ngFor="let actividades of listaActividades" style="border: 1px #383838 solid; border-radius: 5px;" class="ion-padding ion-margin-vertical">
       <ion-note>Descripcion</ion-note>
@@ -77,12 +83,12 @@
     </ion-list>
   </ion-list>
   <ion-list class="ion-margin ion-padding-horizontal">
-    <ion-list-header>
+    <ion-list-header class="ion-no-padding">
       <ion-label>DATOS DE INCIDENCIA</ion-label>
     </ion-list-header>
     <ion-note>Creado por</ion-note>
     <ion-text>
-      <p>incidencia.usuario</p>
+      <p>{{incidencia.usuario}}</p>
     </ion-text>
     <ion-note>Rol del creador</ion-note>
     <ion-text>
@@ -94,11 +100,11 @@
     </ion-text>
     <ion-note>Prioridad</ion-note>
     <ion-text>
-      <p>incidencia.prioridad</p>
+      <p>{{incidencia.prioridad}}</p>
     </ion-text>
     <ion-note>Fecha de la incidencia</ion-note>
     <ion-text>
-      <p>converit.fechaLarga(incidencia.fecha)</p>
+      <p>{{convertir.fechaLarga(incidencia.fecha)}}</p>
     </ion-text>
     <ion-note>Fecha de registro en el sistema</ion-note>
     <ion-text>
