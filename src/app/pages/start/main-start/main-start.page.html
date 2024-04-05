@@ -28,15 +28,11 @@
       <ion-icon name="pie-chart-outline"></ion-icon>
       Reportes
     </ion-button>
-    <ion-button class="ion-align-items-end" expand="full" fill="solid" (click)="irUsuarios()">
+    <ion-button class="ion-align-items-end" expand="full" fill="solid" (click)="irUsuarios()"  [ngStyle]="{'display' : !ocultarUsuarios ? 'block': 'none'}">
       <ion-icon name="people-outline"></ion-icon>
       Usuarios
     </ion-button>
     <div style="position: absolute; bottom: 10px; width: 100%;">
-      <ion-button class="ion-align-items-end" expand="full" fill="solid">
-        <ion-icon name="settings-outline"></ion-icon>
-        Configuración
-      </ion-button>
       <ion-button class="ion-align-items-end" expand="full" fill="solid" (click)="cerrarSesion()">
         <ion-icon name="power-outline"></ion-icon>
         Cerrar sesión

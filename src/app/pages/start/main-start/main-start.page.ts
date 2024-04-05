@@ -38,6 +38,8 @@ export class MainStartPage implements OnInit {
   rol:                string  = ''
   avatar:             string  = ''
   cargandoEjecutado:  boolean = false
+  ocultarUsuarios:    boolean = false
+  ocultarReportes:    boolean = false
 
   
   @ViewChild("chart") chart: ChartComponent;
@@ -137,9 +139,18 @@ export class MainStartPage implements OnInit {
     this.apellido             = await this.almacenar.obtener('apellidos')
     this.apellido             = this.apellido.split(' ')[0] 
     this.rol                  = await this.almacenar.obtener('rol')
+    let rolId                 = parseInt(await this.almacenar.obtener('rolId'))
     let png                   = ['girl', 'boy', 'other']
     let indiceAvatar: number  = parseInt(await this.almacenar.obtener('generoId')) - 1
     this.avatar = "../../../../assets/icon/"+ png[indiceAvatar] +".png"
+    let usuariosHabilitados = [1, 3]
+    if (!usuariosHabilitados.includes(rolId)) {
+      this.ocultarUsuarios = true
+    }
+    let reportesHabilitados = [1, 2, 3]
+    if (!reportesHabilitados.includes(rolId)) {
+      this.ocultarReportes = true
+    }
   }
 
   irIncidencias () {
